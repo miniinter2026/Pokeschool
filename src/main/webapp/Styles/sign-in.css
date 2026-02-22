@@ -33,7 +33,7 @@ body {
   align-items: center;
   justify-content: center;
 
-  background-image: url(/img/backGround.png);
+  background-image: url(../assets/img/backGround.png);
   background-size: cover;
   background-repeat: no-repeat;
 }
