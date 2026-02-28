@@ -6,6 +6,19 @@ public class Disciplina {
     private String nome;
     private int idProfessor;
 
+    // Método construtor
+    public Disciplina(int id, String nome, int idProfessor) {
+        this.id = id;
+        this.nome = nome;
+        this.idProfessor = idProfessor;
+    }
+
+    // Método construtor vazio
+    public  Disciplina() {
+
+    }
+
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

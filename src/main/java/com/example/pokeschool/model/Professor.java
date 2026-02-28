@@ -5,9 +5,24 @@ public class Professor {
     private int id;
     private String nomeCompleto;
     private String nomeUsuario;
-    private String email;
     private String senha;
 
+    // Método construtor
+    public Professor(int id, String nomeCompleto, String nomeUsuario, String senha) {
+        this.id = id;
+        this.nomeCompleto = nomeCompleto;
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+    }
+
+    // Método construtor sem id para usar no cadastro
+    public Professor(String nomeCompleto, String nomeUsuario, String senha) {
+        this.nomeCompleto = nomeCompleto;
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+    }
+
+    // Métodos getters e setters
     public int getId() {
         return id;
     }
@@ -30,14 +45,6 @@ public class Professor {
 
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getSenha() {

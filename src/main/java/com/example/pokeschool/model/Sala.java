@@ -6,6 +6,19 @@ public class Sala {
     private int serie;
     private String letra;
 
+    // Método construtor
+    public Sala(int id, int serie, String letra) {
+        this.id = id;
+        this.serie = serie;
+        this.letra = letra;
+    }
+
+    // Método construtor vazio
+    public Sala() {
+
+    }
+
+    // Métodos getters e setters
     public int getId() {
         return id;
     }
