@@ -6,8 +6,19 @@ public class Aluno {
     private String nomeCompleto;
     private String email;
     private String senha;
-    private int sala;
+    private int idSala;
 
+    // método construtor
+
+    public Aluno(int ra, String nomeCompleto, String email, String senha, int idSala) {
+        this.ra = ra;
+        this.nomeCompleto = nomeCompleto;
+        this.email = email;
+        this.senha = senha;
+        this.idSala = idSala;
+    }
+
+    // métodos getters e setters
     public int getRa() {
         return ra;
     }
@@ -40,11 +51,11 @@ public class Aluno {
         this.senha = senha;
     }
 
-    public int getSala() {
-        return sala;
+    public int getIdSala() {
+        return idSala;
     }
 
-    public void setSala(int sala) {
-        this.sala = sala;
+    public void setIdSala(int sala) {
+        this.idSala = idSala;
     }
 }

@@ -5,46 +5,25 @@ public class Professor {
     private int id;
     private String nomeCompleto;
     private String nomeUsuario;
-    private String email;
     private String senha;
+    private int idDisciplina;
+    private String nomeDisciplina;
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getNomeCompleto() { return nomeCompleto; }
+    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
+    public String getNomeUsuario() { return nomeUsuario; }
+    public void setNomeUsuario(String nomeUsuario) { this.nomeUsuario = nomeUsuario; }
 
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
-    }
+    public int getIdDisciplina() { return idDisciplina; }
+    public void setIdDisciplina(int idDisciplina) { this.idDisciplina = idDisciplina; }
 
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+    public String getNomeDisciplina() { return nomeDisciplina; }
+    public void setNomeDisciplina(String nomeDisciplina) { this.nomeDisciplina = nomeDisciplina; }
 }

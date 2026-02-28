@@ -35,16 +35,4 @@ public class Boletim {
     public double getMedia() {
         return media;
     }
-
-    public void setMedia(double media) {
-        this.media = media;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

@@ -11,51 +11,31 @@ public class Observacoes {
     private int idAluno;
     private int idProfessor;
 
-    public int getId() {
-        return id;
-    }
+    // Campos para exibição (JOIN)
+    private String nomeDisciplina;
+    private String nomeProfessor;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public Date getData() {
-        return data;
-    }
+    public Date getData() { return data; }
+    public void setData(Date data) { this.data = data; }
 
-    public void setData(Date data) {
-        this.data = data;
-    }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 
-    public String getDescricao() {
-        return descricao;
-    }
+    public int getIdDisciplina() { return idDisciplina; }
+    public void setIdDisciplina(int idDisciplina) { this.idDisciplina = idDisciplina; }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+    public int getIdAluno() { return idAluno; }
+    public void setIdAluno(int idAluno) { this.idAluno = idAluno; }
 
-    public int getIdDisciplina() {
-        return idDisciplina;
-    }
+    public int getIdProfessor() { return idProfessor; }
+    public void setIdProfessor(int idProfessor) { this.idProfessor = idProfessor; }
 
-    public void setIdDisciplina(int idDisciplina) {
-        this.idDisciplina = idDisciplina;
-    }
+    public String getNomeDisciplina() { return nomeDisciplina; }
+    public void setNomeDisciplina(String nomeDisciplina) { this.nomeDisciplina = nomeDisciplina; }
 
-    public int getIdAluno() {
-        return idAluno;
-    }
-
-    public void setIdAluno(int idAluno) {
-        this.idAluno = idAluno;
-    }
-
-    public int getIdProfessor() {
-        return idProfessor;
-    }
-
-    public void setIdProfessor(int idProfessor) {
-        this.idProfessor = idProfessor;
-    }
+    public String getNomeProfessor() { return nomeProfessor; }
+    public void setNomeProfessor(String nomeProfessor) { this.nomeProfessor = nomeProfessor; }
 }
