@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PokeSchool | Login</title>
+    <link rel="stylesheet" href="Styles/sign-in.css" />
+  </head>
+  <body>
+    <!-- Login Forms -->
+    <section class="loginFormsSection">
+      <h1>
+        Bem Vindo <br />
+        Novamente!!
+      </h1>
+      <form action="" method="post">
+        <label for="usuario">RA ou usuário:</label>
+        <input
+          class="raCpf"
+          name="usuario"
+          type="text"
+          placeholder="Digite seu RA ou usuário"
+        />
+        <label for="Senha">Senha:</label>
+        <input
+          class="senha"
+          name="Senha"
+          type="password"
+          placeholder="Digite sua senha"
+        />
+        <button type="button" class="toggle-senha">👁️</button>
+        <button type="submit">Entrar</button>
+        <p>Não tem login? <a href="cadastro/index.html">Cadastre-se</a></p>
+      </form>
+    </section>
+    <!-- Details -->
+    <div class="upwards-details">
+      <div class="black-up-left"></div>
+      <div class="red-up-left"></div>
+    </div>
+    <div class="downwards-details">
+      <div class="black-down-rigth"></div>
+      <div class="rd-down-rigth"></div>
+    </div>
+    <!-- JAVA SCRIPT -->
+    <script>
+      const toggleSenha = document.querySelector(".toggle-senha");
+      const inputSenha = document.querySelector(".senha");
+
+      toggleSenha.addEventListener("click", function () {
+        if (inputSenha.type === "password") {
+          inputSenha.type = "text";
+          toggleSenha.textContent = "🙈";
+        } else {
+          inputSenha.type = "password";
+          toggleSenha.textContent = "👁️";
+        }
+      });
+    </script>
+  </body>
+</html>

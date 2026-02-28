@@ -1,0 +1,123 @@
+@font-face {
+  font-family: "metropolis";
+  src: url("../assets/fontes/Metropolis/Metropolis-Black.otf");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --font-title: "metropolis", sans-serif;
+  --font-text: "montserrat", sans-serif;
+  --principal-text-color: #fff;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-image: url(../assets/img/backGround.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+h1 {
+  font-family: var(--font-title);
+  font-size: 65px;
+  text-align: center;
+  color: var(--principal-text-color);
+}
+label {
+  font-family: var(--font-text);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--principal-text-color);
+}
+form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 40%;
+}
+
+input {
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  background-color: rgba(255, 255, 255, 0.288);
+  border: 1.25px solid white;
+}
+input::placeholder {
+  color: var(--principal-text-color);
+}
+
+.loginFormsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 416px;
+  margin-top: 50px;
+  height: 580px;
+}
+
+button {
+  width: 150px;
+  height: 30px;
+  align-self: center;
+  border: none;
+  border-radius: 6px;
+  background-color: #d80000;
+  color: var(--principal-text-color);
+  font-family: var(--font-text);
+  font-size: 20px;
+  transition: 0.2s ease-out;
+}
+button:hover {
+  background-color: #b20000;
+  transition: 0.2s ease-in;
+}
+.toggle-senha {
+  position: absolute;
+  right: 2.5px;
+  top: 39.8%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: white;
+  width: 35px;
+  height: 30px;
+}
+p {
+  font-family: var(--font-text);
+  color: var(--principal-text-color);
+  font-weight: 600;
+  align-self: center;
+  a {
+    text-decoration: none;
+    color: #d80000;
+    transition: 0.2s ease-out;
+  }
+  a:hover {
+    color: #b20000;
+    transition: 0.2s ease-in;
+  }
+}

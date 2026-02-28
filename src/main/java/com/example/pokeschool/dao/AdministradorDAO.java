@@ -2,99 +2,100 @@ package com.example.pokeschool.dao;
 
 import com.example.pokeschool.connection.Conexao;
 import com.example.pokeschool.model.Administrador;
-import com.example.pokeschool.model.Aluno;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdministradorDAO {
-    private Conexao banco = new Conexao();
-    private Connection conn;
 
-    public boolean inserir(Administrador administrador){
-        boolean retorno = false;
-        try{
-            conn = banco.conectar();
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO administrador (nome, nome_usuario, senha) VALUES (?,?, ?)");
+    public boolean inserir(Administrador administrador) {
+        String sql = "INSERT INTO administrador (nome, nome_usuario, senha, email) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, administrador.getNome());
             ps.setString(2, administrador.getNomeUsuario());
             ps.setString(3, administrador.getSenha());
+            ps.setString(4, administrador.getEmail());
 
-            retorno = ps.executeUpdate() == 1;
+            return ps.executeUpdate() == 1;
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        catch(SQLException sqle){
-            System.out.println("!!SQLException ao chamar AdministradorDAO.inserir(administrador)!!");
-            sqle.printStackTrace();
-        }
-        finally{
-            banco.desconectar(conn);
-            return retorno;
-        }
-    } // Método que inseri um administrador na tabela
+        return false;
+    }
 
     public List<Administrador> listar() {
-
         List<Administrador> lista = new ArrayList<>();
         String sql = "SELECT * FROM administrador";
 
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            conn = Conexao.conectar();
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-
-                Administrador administrador = new Administrador(
-                        rs.getString("nome_usuario"),
-                        rs.getString("nome"),
-                        rs.getString("senha")
-                );
-
+                Administrador administrador = new Administrador();
+                administrador.setId(rs.getInt("id"));
+                administrador.setNome(rs.getString("nome"));
+                administrador.setNomeUsuario(rs.getString("nome_usuario"));
+                administrador.setSenha(rs.getString("senha"));
+                administrador.setEmail(rs.getString("email"));
                 lista.add(administrador);
             }
 
         } catch (Exception e) {
-            System.out.println("!!Exception ao chamar AdministradorDAO.listar()!!");
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Conexao.desconectar(conn);
+            e.printStackTrace();
         }
         return lista;
     }
 
     public boolean verificaLoginAdministrador(String nomeUsuario, String senha) {
-        boolean retorno = false;
-        try {
-            conn = banco.conectar();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM administrador WHERE nome_usuario LIKE ? AND senha LIKE ?");
-            ps.setString(1,nomeUsuario);
-            ps.setString(2,senha);
+        String sql = "SELECT * FROM administrador WHERE nome_usuario = ? AND senha = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nomeUsuario);
+            ps.setString(2, senha);
+
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public Administrador login(String nomeUsuario, String senha) {
+        String sql = "SELECT * FROM administrador WHERE nome_usuario = ? AND senha = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nomeUsuario);
+            ps.setString(2, senha);
 
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                retorno = true;
+                Administrador a = new Administrador();
+                a.setId(rs.getInt("id"));
+                a.setNome(rs.getString("nome"));
+                a.setNomeUsuario(rs.getString("nome_usuario"));
+                a.setSenha(rs.getString("senha"));
+                a.setEmail(rs.getString("email"));
+                return a;
             }
+
         } catch (Exception e) {
-            System.out.println("!!SQLException ao chamar AdministradorDAO.verificaLoginAdmin(nomeUsuario ,senha)!!");
             e.printStackTrace();
-        } finally {
-            banco.desconectar(conn);
-            return retorno;
         }
-    } // Método que verifica se existe aquela conta de administrador
+        return null;
+    }
 }

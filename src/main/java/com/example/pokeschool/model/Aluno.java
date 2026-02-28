@@ -8,8 +8,10 @@ public class Aluno {
     private String senha;
     private int idSala;
 
-    // método construtor
+    // Construtor vazio - PRECISA TER!
+    public Aluno() {}
 
+    // Construtor com parâmetros
     public Aluno(int ra, String nomeCompleto, String email, String senha, int idSala) {
         this.ra = ra;
         this.nomeCompleto = nomeCompleto;
@@ -18,7 +20,7 @@ public class Aluno {
         this.idSala = idSala;
     }
 
-    // métodos getters e setters
+    // getters e setters
     public int getRa() {
         return ra;
     }
@@ -55,7 +57,7 @@ public class Aluno {
         return idSala;
     }
 
-    public void setIdSala(int sala) {
+    public void setIdSala(int idSala) {
         this.idSala = idSala;
     }
 }

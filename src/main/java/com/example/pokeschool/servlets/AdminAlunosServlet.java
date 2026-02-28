@@ -13,7 +13,6 @@ import java.util.List;
 @WebServlet("/adminAlunos")
 public class AdminAlunosServlet extends HttpServlet {
 
-    // GET - Carrega os dados e mostra a página
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -26,7 +25,6 @@ public class AdminAlunosServlet extends HttpServlet {
                 .forward(request, response);
     }
 
-    // POST - Insere, Edita e Exclui
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -51,7 +49,7 @@ public class AdminAlunosServlet extends HttpServlet {
         a.setRa(Integer.parseInt(raStr));
         a.setNomeCompleto(nome);
         a.setEmail(email);
-        a.setSala(Integer.parseInt(salaStr));
+        a.setIdSala(Integer.parseInt(salaStr));  // CORRIGIDO: setSala → setIdSala
 
         if ("inserir".equals(acao)) {
             a.setSenha(senha);
