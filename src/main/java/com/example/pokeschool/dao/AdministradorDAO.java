@@ -2,7 +2,7 @@ package com.example.pokeschool.dao;
 
 import com.example.pokeschool.connection.Conexao;
 import com.example.pokeschool.model.Administrador;
-import com.example.pokeschool.model.Professor;
+import com.example.pokeschool.model.Aluno;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,37 +11,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfessorDAO {
+public class AdministradorDAO {
 
     private Conexao banco = new Conexao();
     private Connection conn;
 
-    public boolean inserir(Professor professor){
+    public boolean inserir(Administrador administrador){
         boolean retorno = false;
         try{
             conn = banco.conectar();
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO professor (nome_completo, nome_usuario, senha) VALUES (?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO administrador (nome, nome_usuario, senha) VALUES (?,?, ?)");
 
-            ps.setString(1, professor.getNomeCompleto());
-            ps.setString(2, professor.getNomeUsuario());
-            ps.setString(3, professor.getSenha());
+            ps.setString(1, administrador.getNome());
+            ps.setString(2, administrador.getNomeUsuario());
+            ps.setString(3, administrador.getSenha());
 
             retorno = ps.executeUpdate() == 1;
         }
         catch(SQLException sqle){
-            System.out.println("!!SQLException ao chamar ProfessorDAO.inserir(professor)!!");
+            System.out.println("!!SQLException ao chamar AdministradorDAO.inserir(administrador)!!");
             sqle.printStackTrace();
         }
         finally{
             banco.desconectar(conn);
             return retorno;
         }
-    } // Método que inseri um professor na tabela
+    } // Método que inseri um administrador na tabela
 
-    public List<Professor> listar() {
+    public List<Administrador> listar() {
 
-        List<Professor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM professor";
+        List<Administrador> lista = new ArrayList<>();
+        String sql = "SELECT * FROM administrador";
 
         Connection conn = null;
         PreparedStatement ps = null;
@@ -54,14 +54,13 @@ public class ProfessorDAO {
 
             while (rs.next()) {
 
-                Professor professor = new Professor(
-                        rs.getInt("id"),
-                        rs.getString("nome_completo"),
+                Administrador administrador = new Administrador(
                         rs.getString("nome_usuario"),
+                        rs.getString("nome"),
                         rs.getString("senha")
                 );
 
-                lista.add(professor);
+                lista.add(administrador);
             }
 
         } catch (Exception e) {
@@ -78,11 +77,11 @@ public class ProfessorDAO {
         return lista;
     }
 
-    public boolean verificaLoginProfessor(String nomeUsuario, String senha) {
+    public boolean verificaLoginAdministrador(String nomeUsuario, String senha) {
         boolean retorno = false;
         try {
             conn = banco.conectar();
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM professor WHERE nome_usuario LIKE ? AND senha LIKE ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM administrador WHERE nome_usuario LIKE ? AND senha LIKE ?");
             ps.setString(1,nomeUsuario);
             ps.setString(2,senha);
 
@@ -92,11 +91,11 @@ public class ProfessorDAO {
                 retorno = true;
             }
         } catch (Exception e) {
-            System.out.println("!!SQLException ao chamar ProfessorDAO.verificaLoginProfessor(registro ,senha)!!");
+            System.out.println("!!SQLException ao chamar AdministradorDAO.verificaLoginAdmin(nomeUsuario ,senha)!!");
             e.printStackTrace();
         } finally {
             banco.desconectar(conn);
             return retorno;
         }
-    } // Método que verifica se existe aquela conta de professor
+    } // Método que verifica se existe aquela conta de administrador
 }

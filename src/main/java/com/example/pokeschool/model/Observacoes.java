@@ -11,6 +11,22 @@ public class Observacoes {
     private int idAluno;
     private int idProfessor;
 
+    // Método construtor completo
+    public Observacoes(int id, Date data, String descricao, int idDisciplina, int idAluno, int idProfessor) {
+        this.id = id;
+        this.data = data;
+        this.descricao = descricao;
+        this.idDisciplina = idDisciplina;
+        this.idAluno = idAluno;
+        this.idProfessor = idProfessor;
+    }
+
+    // Método construtor vazio
+    public Observacoes() {
+
+    }
+
+    // Métodos getters e setters
     public int getId() {
         return id;
     }

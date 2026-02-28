@@ -6,61 +6,99 @@ import com.example.pokeschool.model.Aluno;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlunoDAO {
 
-    public void inserir(Aluno a) {
+    private Conexao banco = new Conexao();
+    private Connection conn;
 
-        String sql = "INSERT INTO aluno (ra,nome_completo,email,senha,sala) VALUES (?,?,?,?,?)";
+    public boolean inserir(Aluno aluno){
+        boolean retorno = false;
+        try{
+            conn = banco.conectar();
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO aluno (ra, nome_completo, email, senha, id_sala) VALUES (?,?,?,?,?)");
 
-        try {
+            ps.setInt(1, aluno.getRa());
+            ps.setString(2, aluno.getNomeCompleto());
+            ps.setString(3, aluno.getEmail());
+            ps.setString(4, aluno.getSenha());
+            ps.setInt(5, aluno.getIdSala());
 
-            Connection conn = Conexao.conectar();
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setInt(1, a.getRa());
-            ps.setString(2, a.getNomeCompleto());
-            ps.setString(3, a.getEmail());
-            ps.setString(4, a.getSenha());
-            ps.setInt(5, a.getSala());
-
-            ps.executeUpdate();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            retorno = ps.executeUpdate() == 1;
         }
-    }
+        catch(SQLException sqle){
+            System.out.println("!!SQLException ao chamar AlunoDAO.inserir(aluno)!!");
+            sqle.printStackTrace();
+        }
+        finally{
+            banco.desconectar(conn);
+            return retorno;
+        }
+    } // Método que inseri um aluno na tabela
 
     public List<Aluno> listar() {
 
         List<Aluno> lista = new ArrayList<>();
         String sql = "SELECT * FROM aluno";
 
-        try {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-            Connection conn = Conexao.conectar();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+        try {
+            conn = Conexao.conectar();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
 
             while (rs.next()) {
 
-                Aluno a = new Aluno();
-
-                a.setRa(rs.getInt("ra"));
-                a.setNomeCompleto(rs.getString("nome_completo"));
-                a.setEmail(rs.getString("email"));
-                a.setSenha(rs.getString("senha"));
-                a.setSala(rs.getInt("sala"));
+                Aluno a = new Aluno(
+                        rs.getInt("ra"),
+                        rs.getString("nome_completo"),
+                        rs.getString("email"),
+                        rs.getString("senha"),
+                        rs.getInt("id_sala")
+                );
 
                 lista.add(a);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Conexao.desconectar(conn);
         }
-
         return lista;
     }
+
+    public boolean verificaLoginAluno(int ra, String senha) {
+        boolean retorno = false;
+        try {
+            conn = banco.conectar();
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM aluno WHERE ra LIKE ? AND senha LIKE ?");
+            ps.setInt(1,ra);
+            ps.setString(2,senha);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                retorno = true;
+            }
+        } catch (Exception e) {
+            System.out.println("!!SQLException ao chamar AlunoDAO.verificaLoginAdmin(ra ,senha)!!");
+            e.printStackTrace();
+        } finally {
+            banco.desconectar(conn);
+            return retorno;
+        }
+    } // Método que verifica se existe aquela conta de aluno
 }
