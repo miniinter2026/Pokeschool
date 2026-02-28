@@ -21,6 +21,14 @@ public class Professor {
         this.email = email;
     }
 
+    // Construtor sem id para cadastro
+    public Professor(String nomeCompleto, String nomeUsuario, String senha, String email) {
+        this.nomeCompleto = nomeCompleto;
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+        this.email = email;
+    }
+
     public Professor(String nomeCompleto, String nomeUsuario, String senha) {
     }
 

@@ -13,7 +13,7 @@ public class BoletimDAO {
 
     public void inserir(Boletim b) {
 
-        String sql = "INSERT INTO boletim (n1,n2,media,status) VALUES (?,?,?,?)";
+        String sql = "INSERT INTO boletim (n1,n2) VALUES (?,?)";
 
         try {
 
@@ -22,8 +22,6 @@ public class BoletimDAO {
 
             ps.setDouble(1, b.getN1());
             ps.setDouble(2, b.getN2());
-            ps.setDouble(3, b.getMedia());
-            ps.setString(4, b.getStatus());
 
             ps.executeUpdate();
 
@@ -50,8 +48,6 @@ public class BoletimDAO {
                 b.setId(rs.getInt("id"));
                 b.setN1(rs.getDouble("n1"));
                 b.setN2(rs.getDouble("n2"));
-                b.setMedia(rs.getDouble("media"));
-                b.setStatus(rs.getString("status"));
 
                 lista.add(b);
             }

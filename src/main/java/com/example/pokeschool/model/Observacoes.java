@@ -13,29 +13,93 @@ public class Observacoes {
 
     // Campos para exibição (JOIN)
     private String nomeDisciplina;
+    private String nomeAluno;
     private String nomeProfessor;
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Construtor vazio
+    public Observacoes() {
+    }
 
-    public Date getData() { return data; }
-    public void setData(Date data) { this.data = data; }
+    // Construtor com parâmetros
+    public Observacoes(int id, Date data, String descricao, int idDisciplina, int idAluno, int idProfessor) {
+        this.id = id;
+        this.data = data;
+        this.descricao = descricao;
+        this.idDisciplina = idDisciplina;
+        this.idAluno = idAluno;
+        this.idProfessor = idProfessor;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    // Getters e Setters
+    public int getId() {
+        return id;
+    }
 
-    public int getIdDisciplina() { return idDisciplina; }
-    public void setIdDisciplina(int idDisciplina) { this.idDisciplina = idDisciplina; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getIdAluno() { return idAluno; }
-    public void setIdAluno(int idAluno) { this.idAluno = idAluno; }
+    public Date getData() {
+        return data;
+    }
 
-    public int getIdProfessor() { return idProfessor; }
-    public void setIdProfessor(int idProfessor) { this.idProfessor = idProfessor; }
+    public void setData(Date data) {
+        this.data = data;
+    }
 
-    public String getNomeDisciplina() { return nomeDisciplina; }
-    public void setNomeDisciplina(String nomeDisciplina) { this.nomeDisciplina = nomeDisciplina; }
+    public String getDescricao() {
+        return descricao;
+    }
 
-    public String getNomeProfessor() { return nomeProfessor; }
-    public void setNomeProfessor(String nomeProfessor) { this.nomeProfessor = nomeProfessor; }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public int getIdDisciplina() {
+        return idDisciplina;
+    }
+
+    public void setIdDisciplina(int idDisciplina) {
+        this.idDisciplina = idDisciplina;
+    }
+
+    public int getIdAluno() {
+        return idAluno;
+    }
+
+    public void setIdAluno(int idAluno) {
+        this.idAluno = idAluno;
+    }
+
+    public int getIdProfessor() {
+        return idProfessor;
+    }
+
+    public void setIdProfessor(int idProfessor) {
+        this.idProfessor = idProfessor;
+    }
+
+    public String getNomeDisciplina() {
+        return nomeDisciplina;
+    }
+
+    public void setNomeDisciplina(String nomeDisciplina) {
+        this.nomeDisciplina = nomeDisciplina;
+    }
+
+    public String getNomeAluno() {
+        return nomeAluno;
+    }
+
+    public void setNomeAluno(String nomeAluno) {
+        this.nomeAluno = nomeAluno;
+    }
+
+    public String getNomeProfessor() {
+        return nomeProfessor;
+    }
+
+    public void setNomeProfessor(String nomeProfessor) {
+        this.nomeProfessor = nomeProfessor;
+    }
 }

@@ -8,7 +8,7 @@ public class Aluno {
     private String senha;
     private int idSala;
 
-    // Construtor vazio - PRECISA TER!
+    // Construtor vazio
     public Aluno() {}
 
     // Construtor com parâmetros
@@ -21,43 +21,18 @@ public class Aluno {
     }
 
     // getters e setters
-    public int getRa() {
-        return ra;
-    }
+    public int getRa() { return ra; }
+    public void setRa(int ra) { this.ra = ra; }
 
-    public void setRa(int ra) {
-        this.ra = ra;
-    }
+    public String getNomeCompleto() { return nomeCompleto; }
+    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
 
-    public String getNomeCompleto() {
-        return nomeCompleto;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setNomeCompleto(String nomeCompleto) {
-        this.nomeCompleto = nomeCompleto;
-    }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public int getIdSala() {
-        return idSala;
-    }
-
-    public void setIdSala(int idSala) {
-        this.idSala = idSala;
-    }
+    public int getIdSala() { return idSala; }
+    public void setIdSala(int idSala) { this.idSala = idSala; }
 }
