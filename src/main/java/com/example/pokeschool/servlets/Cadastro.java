@@ -32,12 +32,12 @@ public class Cadastro extends HttpServlet {
             // Direciona usuário a partir do caminho que chegou no servlet
             if (caminho.equals("/CadastroAluno")) {
                 System.out.println("Entrou no aluno - GET");
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/cadastro-aluno.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("cadastro-aluno/index.jsp"); // arrumar caminho
                 rd.forward(request, response);
 
             } else if (caminho.equals("/CadastroProfessor")) {
                 System.out.println("Entrou no professor - GET");
-                RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/cadastro-professor.jsp");
+                RequestDispatcher rd = request.getRequestDispatcher("cadastro-professor/index.jsp");
                 rd.forward(request, response);
 
             } else {
@@ -106,7 +106,7 @@ public class Cadastro extends HttpServlet {
                 } else {
                     System.out.println("Falha ao cadastrar aluno");
                     request.setAttribute("erro", "Falha ao cadastrar aluno");
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/cadastro-aluno.jsp");
+                    RequestDispatcher rd = request.getRequestDispatcher("cadastro-aluno/index.jsp");
                     rd.forward(request, response);
                 }
 
@@ -134,7 +134,7 @@ public class Cadastro extends HttpServlet {
                 } else {
                     System.out.println("Falha ao cadastrar professor");
                     request.setAttribute("erro", "Falha ao cadastrar professor");
-                    RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/cadastro-professor.jsp");
+                    RequestDispatcher rd = request.getRequestDispatcher("cadastro-professor/index.jsp");
                     rd.forward(request, response);
                 }
 
