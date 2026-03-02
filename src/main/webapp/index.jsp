@@ -1,10 +1,11 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PokeSchool | Login</title>
-    <link rel="stylesheet" href="Styles/sign-in.css" />
+    <link rel="stylesheet" type="text/css" href="Styles/sign-in.css" />
   </head>
   <body>
     <!-- Login Forms -->
@@ -13,27 +14,16 @@
         Bem Vindo <br />
         Novamente!!
       </h1>
-      <form action="/login" method="post">
+      <form action="${pageContext.request.contextPath}/login" method="post">
         <label for="usuario">RA ou usuário:</label>
-        <input
-          class="raCpf"
-          name="usuario"
-          type="text"
-          placeholder="Digite seu RA ou usuário"
-          required
-        />
+        <input class="raCpf" type="text" name="usuario" placeholder="RA ou usuário" required>
         <label for="Senha">Senha:</label>
-        <input
-          class="senha"
-          name="senha"
-          type="password"
-          placeholder="Digite sua senha"
-          required
-        />
+        <input class="senha" type="password" name="senha" placeholder="Senha" required>
         <button type="button" class="toggle-senha">👁️</button>
         <button type="submit">Entrar</button>
         <p>Não tem login? <a href="cadastro/index.html">Cadastre-se</a></p>
-        <a class="ems" href="./recuperaSenha/solicitar-senha.jsp" style="font-family: var(--font-text);
+        <a class="ems" href="${pageContext.request.contextPath}/recuperaSenha/solicitar-senha.jsp"
+        style="font-family: var(--font-text);
   color: #d80000;
   text-decoration: none;
   align-self: center;
