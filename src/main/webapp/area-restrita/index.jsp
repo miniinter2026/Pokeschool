@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>PokeSchool - Admin</title>
-    <link rel="stylesheet" type="text/css" href="../Styles/admAlunos.css">
+    <link rel="stylesheet" type="text/css" href="../Styles/admDashboard.css">
 </head>
 <body>
 
