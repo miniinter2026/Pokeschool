@@ -111,13 +111,18 @@ p {
   color: var(--principal-text-color);
   font-weight: 600;
   align-self: center;
-  a {
-    text-decoration: none;
-    color: #d80000;
-    transition: 0.2s ease-out;
-  }
-  a:hover {
-    color: #b20000;
-    transition: 0.2s ease-in;
-  }
+}
+
+p a {
+  text-decoration: none;
+  color: #d80000;
+  transition: 0.2s ease-out;
+}
+
+p a:hover {
+  color: #860000;
+  transition: 0.2s ease;
+}
+.ems:hover {
+  color: #860000;
 }

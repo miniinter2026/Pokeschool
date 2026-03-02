@@ -1,0 +1,94 @@
+@font-face {
+    font-family: "metropolis";
+    src: url("../assets/fontes/Metropolis/Metropolis-Black.otf");
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
+    format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Montserrat";
+    src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
+    format("truetype");
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: black;
+    color: white;
+    font-family: "Montserrat", sans-serif;
+}
+
+.container {
+    position: absolute;
+    width: 415px;
+    height: 200px;
+    background-color: #77508d;
+    color: black;
+    top: 35%;
+    border-radius: 15px;
+}
+
+form, h2{
+    align-self: center;
+    justify-self: center;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+
+input {
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    background-color: rgba(255, 255, 255, 0.288);
+    border: 1.25px solid white;
+}
+input::placeholder {
+    color: white;
+}
+button {
+    width: 150px;
+    height: 30px;
+    align-self: center;
+    border: none;
+    border-radius: 6px;
+    background-color: #d80000;
+    color: white;
+    font-family: "Montserrat", sans-serif;
+    font-size: 20px;
+    transition: 0.2s ease-out;
+}
+button:hover {
+    background-color: #b20000;
+    transition: 0.2s ease-in;
+}
+.mew1{
+    position: absolute;
+    width: 200px;
+    left: 450px;
+    top: 48%;
+}
+.mew2{
+    position: absolute;
+    width: 270px;
+    right: 425px;
+    top: 15%;
+    z-index: 2;
+}
