@@ -48,8 +48,8 @@
     <div class="header">
         <h1> PokeSchool - Admin</h1>
         <div class="nav-links">
-            <a href="adminAlunos" class="nav-link">Alunos</a>
-            <a href="adminProfessores" class="nav-link active">Professores</a>
+            <a href="index.jsp" class="nav-link">Alunos</a>
+            <a href="adminProfessores.jsp" class="nav-link active">Professores</a>
             <a href="/login.jsp" class="nav-link">Sair</a>
         </div>
     </div>
