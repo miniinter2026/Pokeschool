@@ -33,9 +33,9 @@ body {
   align-items: center;
   justify-content: center;
 
-  background-image: url(../assets/img/backGround.png);
-  background-size: cover;
-  background-repeat: no-repeat;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff0000 0%, #000000 50%, #ffffff 100%);
 }
 
 h1 {
@@ -55,7 +55,7 @@ form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 40%;
+  margin-top: 10%;
 }
 
 input {
@@ -97,7 +97,7 @@ button:hover {
 .toggle-senha {
   position: absolute;
   right: 2.5px;
-  top: 39.8%;
+  top: 37%;
   background: none;
   border: none;
   cursor: pointer;
@@ -125,4 +125,7 @@ p a:hover {
 }
 .ems:hover {
   color: #860000;
+}
+.logo{
+  width: 100px;
 }

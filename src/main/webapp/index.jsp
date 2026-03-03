@@ -14,6 +14,7 @@
         Bem Vindo <br />
         Novamente!!
       </h1>
+      <img src="assets/img/LogoPokeSchool.png" class="logo">
       <form action="${pageContext.request.contextPath}/login" method="post">
         <label for="usuario">RA ou usuário:</label>
         <input class="raCpf" type="text" name="usuario" placeholder="RA ou usuário" required>
@@ -21,7 +22,7 @@
         <input class="senha" type="password" name="senha" placeholder="Senha" required>
         <button type="button" class="toggle-senha">👁️</button>
         <button type="submit">Entrar</button>
-        <p>Não tem login? <a href="cadastro/index.html">Cadastre-se</a></p>
+        <p>Não tem login? <a href="cadastro/index.jsp">Cadastre-se</a></p>
         <a class="ems" href="${pageContext.request.contextPath}/recuperaSenha/solicitar-senha.jsp"
         style="font-family: var(--font-text);
   color: #d80000;

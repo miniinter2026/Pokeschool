@@ -1,10 +1,11 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PokeSchool | Cadastro</title>
-    <link rel="stylesheet" href="../Styles/sign-up.css" />
+    <link rel="stylesheet" type="text/css" href="../Styles/sign-up.css" />
   </head>
   <body>
     <!-- Login Forms -->
@@ -13,7 +14,8 @@
         Seja <br />
         Bem vindo!!
       </h1>
-      <form action="" method="">
+      <img src="../assets/img/LogoPokeSchool.png" class="logo">
+      <form action="${pageContext.request.contextPath}" method="post">
         <label for="name">Nome:</label>
         <input type="text" name="name" placeholder="Digite seu nome completo" />
         <label for="RA">RA:</label>
