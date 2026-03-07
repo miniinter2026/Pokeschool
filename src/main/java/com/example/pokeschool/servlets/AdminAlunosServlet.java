@@ -21,7 +21,7 @@ public class AdminAlunosServlet extends HttpServlet {
 
         request.setAttribute("listaAlunos", lista);
 
-        request.getRequestDispatcher("/index.jsp")
+        request.getRequestDispatcher("/home-aluno.jsp")
                 .forward(request, response);
     }
 

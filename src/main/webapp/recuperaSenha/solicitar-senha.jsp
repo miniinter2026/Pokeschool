@@ -21,21 +21,13 @@
     <div class="container">
       <h2>Recuperar Senha</h2>
 
-      <form
-        action="${pageContext.request.contextPath}/recuperar-senha"
-        method="POST"
-      >
-        <input type="hidden" name="acao" value="solicitar" />
+      <form action="${pageContext.request.contextPath}/recuperar-senha" method="POST">
+        <input type="hidden" name="acao" value="solicitar">
 
-        <input
-          type="email"
-          name="email"
-          placeholder="Digite seu e-mail"
-          required
-        />
+        <input type="email" name="email" placeholder="Digite seu e-mail" required>
 
         <button type="submit">Enviar Token</button>
-      </form>
+    </form>
     </div>
     <img src="../assets/img/mew1.png" class="mew1" style="
     position: absolute;

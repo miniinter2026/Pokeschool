@@ -17,7 +17,7 @@ public class AlunoDAO {
 
     public boolean inserir(Aluno aluno) {
         boolean retorno = false;
-        String sql = "INSERT INTO aluno (ra, nome_completo, email, senha, sala) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO aluno (ra, nome_completo, email, senha, id_sala) VALUES (?,?,?,?,?)";
 
         try {
             conn = banco.conectar();
@@ -58,7 +58,7 @@ public class AlunoDAO {
                 a.setNomeCompleto(rs.getString("nome_completo"));
                 a.setEmail(rs.getString("email"));
                 a.setSenha(rs.getString("senha"));
-                a.setIdSala(rs.getInt("sala"));  // Usa "sala" no banco
+                a.setIdSala(rs.getInt("id_sala"));  // Usa "sala" no banco
                 lista.add(a);
             }
 
@@ -78,7 +78,7 @@ public class AlunoDAO {
 
     public boolean atualizar(Aluno a) {
         boolean retorno = false;
-        String sql = "UPDATE aluno SET nome_completo=?, email=?, senha=?, sala=? WHERE ra=?";
+        String sql = "UPDATE aluno SET nome_completo=?, email=?, senha=?, id_sala=? WHERE ra=?";
 
         try {
             conn = banco.conectar();
@@ -161,7 +161,7 @@ public class AlunoDAO {
                 a.setNomeCompleto(rs.getString("nome_completo"));
                 a.setEmail(rs.getString("email"));
                 a.setSenha(rs.getString("senha"));
-                a.setIdSala(rs.getInt("sala"));
+                a.setIdSala(rs.getInt("id_sala"));
                 return a;
             }
         } catch (Exception e) {
@@ -190,7 +190,7 @@ public class AlunoDAO {
                 a.setNomeCompleto(rs.getString("nome_completo"));
                 a.setEmail(rs.getString("email"));
                 a.setSenha(rs.getString("senha"));
-                a.setIdSala(rs.getInt("sala"));
+                a.setIdSala(rs.getInt("id_sala"));
                 return a;
             }
 

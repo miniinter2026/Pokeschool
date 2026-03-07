@@ -87,7 +87,7 @@ public class Login extends HttpServlet {
 
                 if (loginValido) {
                     System.out.println("Login de aluno válido!");
-                    RequestDispatcher rd = request.getRequestDispatcher("aluno/index.jsp");
+                    RequestDispatcher rd = request.getRequestDispatcher("aluno/home-aluno.jsp");
                     rd.forward(request, response);
                 } else {
                     System.out.println("Login de aluno inválido");
@@ -111,7 +111,7 @@ public class Login extends HttpServlet {
 
                 if (loginValido) {
                     System.out.println("Login de professor válido!");
-                    RequestDispatcher rd = request.getRequestDispatcher("professor/index.jsp");
+                    RequestDispatcher rd = request.getRequestDispatcher("professor/home-aluno.jsp");
                     rd.forward(request, response);
                 } else {
                     System.out.println("Login de professor inválido");
@@ -135,7 +135,7 @@ public class Login extends HttpServlet {
 
                 if (loginValido) {
                     System.out.println("Login de administrador válido!");
-                    RequestDispatcher rd = request.getRequestDispatcher("area-restrita/index.jsp");
+                    RequestDispatcher rd = request.getRequestDispatcher("area-restrita/home-aluno.jsp");
                     rd.forward(request, response);
                 } else {
                     System.out.println("Login de administrador inválido");

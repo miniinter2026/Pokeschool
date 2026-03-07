@@ -7,25 +7,27 @@ import java.sql.SQLException;
 
 public class Conexao {
 
+    private static Dotenv dotenv = Dotenv.load();
+    private static String url = dotenv.get("dbUrl");
+    private static String user = dotenv.get("dbUser");
+    private static String pass = dotenv.get("dbSenha");
+
+    // Sempre que a classe for inicializada ele vai rodar esse método estatico para garantir que a classe seja verificada
+    static {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Método para fazer a conexão com o banco
     public static Connection conectar() {
 
         Connection conn = null;
 
         try {
-
-            Dotenv dotenv = Dotenv.configure()
-                    .directory("src/main/resources")
-                    .load();
-
-            String url = dotenv.get("dbUrl");
-            String user = dotenv.get("dbUser");
-            String pass = dotenv.get("dbSenha");
-
-            Class.forName("org.postgresql.Driver");
-
             conn = DriverManager.getConnection(url, user, pass);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
