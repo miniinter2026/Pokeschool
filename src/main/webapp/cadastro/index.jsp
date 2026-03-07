@@ -36,7 +36,7 @@
         />
         <button type="button" class="toggle-senha">👁️</button>
         <button type="submit">Entrar</button>
-        <p>Já tem conta? <a href="../index.jsp">Log-se</a></p>
+        <p>Já tem conta? <a href="../index.jsp">Faça login</a></p>
       </form>
     </section>
     <!-- Details -->

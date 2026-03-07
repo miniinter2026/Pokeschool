@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PokeSchool | Cadastro</title>
-    <link rel="stylesheet" type="text/css" href="Styles/sing-up.css" />
+    <link rel="stylesheet" type="text/css" href="../Styles/sing-up.css" />
 </head>
 <body>
 <!-- Login Forms -->
