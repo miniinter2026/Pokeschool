@@ -73,6 +73,36 @@ public class ObservacoesDAO {
         return lista;
     }
 
+    // ✅ NOVO MÉTODO: Filtrar por aluno E disciplina
+    public List<Observacoes> listarPorAlunoERa(int idAluno, int disciplinaId) {
+        List<Observacoes> lista = new ArrayList<>();
+        String sql = "SELECT o.id, o.data, o.descricao, d.nome AS disciplina, p.nome_completo AS professor " +
+                "FROM observacoes o " +
+                "JOIN disciplina d ON o.id_disciplina = d.id " +
+                "JOIN professor p ON o.id_professor = p.id " +
+                "WHERE o.id_aluno = ? AND o.id_disciplina = ? " +
+                "ORDER BY o.data DESC";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idAluno);
+            ps.setInt(2, disciplinaId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Observacoes o = new Observacoes();
+                o.setId(rs.getInt("id"));
+                o.setData(rs.getDate("data"));
+                o.setDescricao(rs.getString("descricao"));
+                o.setNomeDisciplina(rs.getString("disciplina"));
+                o.setNomeProfessor(rs.getString("professor"));
+                lista.add(o);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     public Observacoes buscarPorId(int id) {
         String sql = "SELECT * FROM observacoes WHERE id = ?";
         try (Connection conn = Conexao.conectar();

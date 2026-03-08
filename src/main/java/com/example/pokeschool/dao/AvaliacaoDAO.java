@@ -35,6 +35,36 @@ public class AvaliacaoDAO {
         return lista;
     }
 
+    // ✅ NOVO MÉTODO: Filtrar por aluno E disciplina
+    public List<Avaliacao> listarPorAlunoERa(int ra, int disciplinaId) {
+        List<Avaliacao> lista = new ArrayList<>();
+        String sql = "SELECT a.id, a.id_boletim, d.nome AS disciplina, b.n1, b.n2 " +
+                "FROM avaliacao a " +
+                "JOIN disciplina d ON a.id_disciplina = d.id " +
+                "JOIN boletim b ON a.id_boletim = b.id " +
+                "WHERE a.id_aluno = ? AND a.id_disciplina = ? " +
+                "ORDER BY a.id";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ra);
+            ps.setInt(2, disciplinaId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Avaliacao a = new Avaliacao();
+                a.setId(rs.getInt("id"));
+                a.setIdBoletim(rs.getInt("id_boletim"));
+                a.setNomeDisciplina(rs.getString("disciplina"));
+                a.setN1(rs.getDouble("n1"));
+                a.setN2(rs.getDouble("n2"));
+                lista.add(a);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
     public void salvar(Avaliacao a) {
         String sqlBoletim = "INSERT INTO boletim (n1, n2) VALUES (?, ?) RETURNING id";
         String sqlAvaliacao = "INSERT INTO avaliacao (id_aluno, id_disciplina, id_boletim) VALUES (?, ?, ?)";
@@ -76,7 +106,6 @@ public class AvaliacaoDAO {
         }
     }
 
-    // ✅ NOVO MÉTODO DELETAR
     public void deletar(int id) {
         String sqlGetBoletim = "SELECT id_boletim FROM avaliacao WHERE id = ?";
         String sqlDeleteAvaliacao = "DELETE FROM avaliacao WHERE id = ?";
@@ -87,7 +116,6 @@ public class AvaliacaoDAO {
 
             int idBoletim = 0;
 
-            // Pegar o id do boletim antes de deletar a avaliação
             try (PreparedStatement ps = conn.prepareStatement(sqlGetBoletim)) {
                 ps.setInt(1, id);
                 ResultSet rs = ps.executeQuery();
@@ -96,13 +124,11 @@ public class AvaliacaoDAO {
                 }
             }
 
-            // Deletar a avaliação
             try (PreparedStatement ps = conn.prepareStatement(sqlDeleteAvaliacao)) {
                 ps.setInt(1, id);
                 ps.executeUpdate();
             }
 
-            // Deletar o boletim
             if (idBoletim > 0) {
                 try (PreparedStatement ps = conn.prepareStatement(sqlDeleteBoletim)) {
                     ps.setInt(1, idBoletim);

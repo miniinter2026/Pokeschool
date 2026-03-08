@@ -1,44 +1,85 @@
-<%@ page import="java.util.List" %>
-<%@ page import="com.example.pokeschool.model.Aluno" %>
-<%@ page import="com.example.pokeschool.model.Professor" %>
+<%@ page contentType="text/html;charset=UTF-8" import="java.util.List, com.example.pokeschool.model.Aluno, com.example.pokeschool.model.Professor" %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>PokeSchool - Admin</title>
-    <link rel="stylesheet" type="text/css" href="../Styles/admDashboard.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/admDashboard.css">
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .modal-content {
+            background-color: #f5f5f5;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 60%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover { color: black; }
+        .btn {
+            padding: 8px 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-right: 5px;
+        }
+        .btn-primary { background-color: #d80000; color: white; }
+        .btn-edit { background-color: #2196F3; color: white; }
+        .btn-danger { background-color: #f44336; color: white; }
+        .btn-add { background-color: #d80000; color: white; padding: 10px 20px; font-size: 16px; }
+        .actions { display: flex; gap: 5px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+    </style>
 </head>
 <body>
 
 <div class="layout">
-
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="profile">
             <img src="../assets/img/arceus.jpg" alt="Admin">
             <h3>ADMIN</h3>
         </div>
-
         <nav>
-            <a href="#" class="nav-btn active" onclick="mostrarSecao('alunos', this)">Alunos</a>
-            <a href="#" class="nav-btn" onclick="mostrarSecao('professores', this)">Professores</a>
-            <a href="login.jsp">Sair</a>
+            <a href="adminDashboard" class="nav-btn active">Alunos</a>
+            <a href="adminDashboard" class="nav-btn" onclick="mostrarSecao('professores', this)">Professores</a>
+            <a href="../index.jsp">Sair</a>
         </nav>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
         <div class="top-wave"></div>
-
         <div class="container">
 
-            <!-- ===================== -->
             <!-- SEÇÃO ALUNOS -->
-            <!-- ===================== -->
             <div id="secao-alunos" class="section active-section">
-
                 <h2>Gerenciar Alunos</h2>
-
+                <button class="btn btn-add" onclick="abrirModalAddAluno()">+ Novo Aluno</button>
                 <input type="text" id="buscaAluno" placeholder="Buscar por nome ou RA..." onkeyup="buscarAluno()">
 
                 <table id="tabelaAlunos">
@@ -48,12 +89,13 @@
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Sala</th>
+                        <th>Ações</th>
                     </tr>
                     </thead>
                     <tbody>
                     <%
                         List<Aluno> listaAlunos = (List<Aluno>) request.getAttribute("listaAlunos");
-                        if (listaAlunos != null) {
+                        if (listaAlunos != null && !listaAlunos.isEmpty()) {
                             for (Aluno a : listaAlunos) {
                     %>
                     <tr>
@@ -61,23 +103,38 @@
                         <td><%= a.getNomeCompleto() %></td>
                         <td><%= a.getEmail() %></td>
                         <td><%= a.getIdSala() %></td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-edit"
+                                    data-ra="<%= a.getRa() %>"
+                                    data-nome="<%= a.getNomeCompleto().replace("'", "\\'") %>"
+                                    data-email="<%= a.getEmail().replace("'", "\\'") %>"
+                                    data-sala="<%= a.getIdSala() %>"
+                                    onclick="abrirModalEditAluno(this)">Editar</button>
+                                <button class="btn btn-danger"
+                                    data-ra="<%= a.getRa() %>"
+                                    onclick="confirmarDeleteAluno(this)">Excluir</button>
+                            </div>
+                        </td>
                     </tr>
                     <%
                             }
+                        } else {
+                    %>
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #666;">Nenhum aluno cadastrado.</td>
+                    </tr>
+                    <%
                         }
                     %>
                     </tbody>
                 </table>
             </div>
 
-
-            <!-- ===================== -->
             <!-- SEÇÃO PROFESSORES -->
-            <!-- ===================== -->
             <div id="secao-professores" class="section">
-
                 <h2>Gerenciar Professores</h2>
-
+                <button class="btn btn-add" onclick="abrirModalAddProfessor()">+ Novo Professor</button>
                 <input type="text" id="buscaProfessor" placeholder="Buscar por nome..." onkeyup="buscarProfessor()">
 
                 <table id="tabelaProfessores">
@@ -88,12 +145,13 @@
                         <th>Usuário</th>
                         <th>Email</th>
                         <th>Disciplina</th>
+                        <th>Ações</th>
                     </tr>
                     </thead>
                     <tbody>
                     <%
                         List<Professor> listaProfessores = (List<Professor>) request.getAttribute("listaProfessores");
-                        if (listaProfessores != null) {
+                        if (listaProfessores != null && !listaProfessores.isEmpty()) {
                             for (Professor p : listaProfessores) {
                     %>
                     <tr>
@@ -102,9 +160,29 @@
                         <td><%= p.getNomeUsuario() %></td>
                         <td><%= p.getEmail() %></td>
                         <td><%= p.getNomeDisciplina() != null ? p.getNomeDisciplina() : "Não definida" %></td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-edit"
+                                    data-id="<%= p.getId() %>"
+                                    data-nome="<%= p.getNomeCompleto().replace("'", "\\'") %>"
+                                    data-usuario="<%= p.getNomeUsuario().replace("'", "\\'") %>"
+                                    data-email="<%= p.getEmail().replace("'", "\\'") %>"
+                                    data-disciplina="<%= p.getIdDisciplina() %>"
+                                    onclick="abrirModalEditProfessor(this)">Editar</button>
+                                <button class="btn btn-danger"
+                                    data-id="<%= p.getId() %>"
+                                    onclick="confirmarDeleteProfessor(this)">Excluir</button>
+                            </div>
+                        </td>
                     </tr>
                     <%
                             }
+                        } else {
+                    %>
+                    <tr>
+                        <td colspan="6" style="text-align: center; color: #666;">Nenhum professor cadastrado.</td>
+                    </tr>
+                    <%
                         }
                     %>
                     </tbody>
@@ -115,30 +193,201 @@
     </div>
 </div>
 
+<!-- MODAIS ALUNOS -->
+<div id="modal-add-aluno" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal('modal-add-aluno')">&times;</span>
+        <h3>➕ Novo Aluno</h3>
+        <form action="adminAlunos" method="post">
+            <input type="hidden" name="acao" value="inserir">
+            <div class="form-group">
+                <label>RA:</label>
+                <input type="number" name="ra" required>
+            </div>
+            <div class="form-group">
+                <label>Nome Completo:</label>
+                <input type="text" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" name="senha" required>
+            </div>
+            <div class="form-group">
+                <label>Sala:</label>
+                <select name="sala" required>
+                    <option value="">Selecione...</option>
+                    <option value="1">1K</option>
+                    <option value="2">2J</option>
+                    <option value="3">3H</option>
+                    <option value="4">4S</option>
+                    <option value="5">5U</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<div id="modal-edit-aluno" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal('modal-edit-aluno')">&times;</span>
+        <h3>✏️ Editar Aluno</h3>
+        <form action="adminAlunos" method="post">
+            <input type="hidden" name="acao" value="editar">
+            <div class="form-group">
+                <label>RA:</label>
+                <input type="number" name="ra" id="edit-ra" required>
+            </div>
+            <div class="form-group">
+                <label>Nome Completo:</label>
+                <input type="text" name="nome" id="edit-nome" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" id="edit-email" required>
+            </div>
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" name="senha" id="edit-senha">
+            </div>
+            <div class="form-group">
+                <label>Sala:</label>
+                <select name="sala" id="edit-sala" required>
+                    <option value="1">1K</option>
+                    <option value="2">2J</option>
+                    <option value="3">3H</option>
+                    <option value="4">4S</option>
+                    <option value="5">5U</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+<div id="modal-delete-aluno" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal('modal-delete-aluno')">&times;</span>
+        <h3>🗑️ Confirmar Exclusão</h3>
+        <p>Tem certeza que deseja excluir este aluno?</p>
+        <form action="adminAlunos" method="post">
+            <input type="hidden" name="acao" value="excluir">
+            <input type="hidden" name="ra" id="delete-ra">
+            <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+            <button type="button" class="btn" onclick="fecharModal('modal-delete-aluno')">Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<!-- MODAIS PROFESSORES -->
+<div id="modal-add-professor" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal('modal-add-professor')">&times;</span>
+        <h3>➕ Novo Professor</h3>
+        <form action="adminProfessores" method="post">
+            <input type="hidden" name="acao" value="inserir">
+            <div class="form-group">
+                <label>Nome Completo:</label>
+                <input type="text" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label>Usuário:</label>
+                <input type="text" name="usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" name="senha" required>
+            </div>
+            <div class="form-group">
+                <label>Disciplina:</label>
+                <select name="disciplina" required>
+                    <option value="">Selecione...</option>
+                    <option value="1">Matemática</option>
+                    <option value="2">Português</option>
+                    <option value="3">História</option>
+                    <option value="4">Ciências</option>
+                    <option value="5">Informática</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+    </div>
+</div>
+
+<div id="modal-edit-professor" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal('modal-edit-professor')">&times;</span>
+        <h3>✏️ Editar Professor</h3>
+        <form action="adminProfessores" method="post">
+            <input type="hidden" name="acao" value="editar">
+            <div class="form-group">
+                <label>ID:</label>
+                <input type="number" name="id" id="edit-id" required>
+            </div>
+            <div class="form-group">
+                <label>Nome Completo:</label>
+                <input type="text" name="nome" id="edit-nome" required>
+            </div>
+            <div class="form-group">
+                <label>Usuário:</label>
+                <input type="text" name="usuario" id="edit-usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" id="edit-email" required>
+            </div>
+            <div class="form-group">
+                <label>Senha:</label>
+                <input type="password" name="senha" id="edit-senha">
+            </div>
+            <div class="form-group">
+                <label>Disciplina:</label>
+                <select name="disciplina" id="edit-disciplina" required>
+                    <option value="1">Matemática</option>
+                    <option value="2">Português</option>
+                    <option value="3">História</option>
+                    <option value="4">Ciências</option>
+                    <option value="5">Informática</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Atualizar</button>
+        </form>
+    </div>
+</div>
+
+<div id="modal-delete-professor" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModal('modal-delete-professor')">&times;</span>
+        <h3>🗑️ Confirmar Exclusão</h3>
+        <p>Tem certeza que deseja excluir este professor?</p>
+        <form action="adminProfessores" method="post">
+            <input type="hidden" name="acao" value="excluir">
+            <input type="hidden" name="id" id="delete-id">
+            <button type="submit" class="btn btn-danger">Sim, Excluir</button>
+            <button type="button" class="btn" onclick="fecharModal('modal-delete-professor')">Cancelar</button>
+        </form>
+    </div>
+</div>
+
 <script>
-
     function mostrarSecao(secao, element) {
-
-        // Remove active de todos
         document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
-        // Ativa o botão clicado
         element.classList.add('active');
-
-        // Esconde todas seções
-        document.querySelectorAll('.section').forEach(sec => {
-            sec.classList.remove('active-section');
-        });
-
-        // Mostra a selecionada
+        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-section'));
         document.getElementById('secao-' + secao).classList.add('active-section');
     }
-
 
     function buscarAluno() {
         let input = document.getElementById('buscaAluno').value.toUpperCase();
         let rows = document.querySelectorAll('#tabelaAlunos tbody tr');
-
         rows.forEach(row => {
             let ra = row.cells[0].textContent.toUpperCase();
             let nome = row.cells[1].textContent.toUpperCase();
@@ -149,14 +398,85 @@
     function buscarProfessor() {
         let input = document.getElementById('buscaProfessor').value.toUpperCase();
         let rows = document.querySelectorAll('#tabelaProfessores tbody tr');
-
         rows.forEach(row => {
             let nome = row.cells[1].textContent.toUpperCase();
             row.style.display = nome.includes(input) ? '' : 'none';
         });
     }
 
-</script>
+    function fecharModal(id) {
+        document.getElementById(id).style.display = 'none';
+    }
 
+    function abrirModalAddAluno() {
+        fecharModal('modal-edit-aluno');
+        fecharModal('modal-delete-aluno');
+        document.getElementById('modal-add-aluno').style.display = 'block';
+    }
+
+    function abrirModalEditAluno(btn) {
+        fecharModal('modal-add-aluno');
+        fecharModal('modal-delete-aluno');
+
+        const ra = btn.getAttribute('data-ra');
+        const nome = btn.getAttribute('data-nome');
+        const email = btn.getAttribute('data-email');
+        const sala = btn.getAttribute('data-sala');
+
+        document.getElementById('edit-ra').value = ra;
+        document.getElementById('edit-nome').value = nome;
+        document.getElementById('edit-email').value = email;
+        document.getElementById('edit-sala').value = sala;
+        document.getElementById('modal-edit-aluno').style.display = 'block';
+    }
+
+    function confirmarDeleteAluno(btn) {
+        fecharModal('modal-add-aluno');
+        fecharModal('modal-edit-aluno');
+
+        const ra = btn.getAttribute('data-ra');
+        document.getElementById('delete-ra').value = ra;
+        document.getElementById('modal-delete-aluno').style.display = 'block';
+    }
+
+    function abrirModalAddProfessor() {
+        fecharModal('modal-edit-professor');
+        fecharModal('modal-delete-professor');
+        document.getElementById('modal-add-professor').style.display = 'block';
+    }
+
+    function abrirModalEditProfessor(btn) {
+        fecharModal('modal-add-professor');
+        fecharModal('modal-delete-professor');
+
+        const id = btn.getAttribute('data-id');
+        const nome = btn.getAttribute('data-nome');
+        const usuario = btn.getAttribute('data-usuario');
+        const email = btn.getAttribute('data-email');
+        const disciplina = btn.getAttribute('data-disciplina');
+
+        document.getElementById('edit-id').value = id;
+        document.getElementById('edit-nome').value = nome;
+        document.getElementById('edit-usuario').value = usuario;
+        document.getElementById('edit-email').value = email;
+        document.getElementById('edit-disciplina').value = disciplina;
+        document.getElementById('modal-edit-professor').style.display = 'block';
+    }
+
+    function confirmarDeleteProfessor(btn) {
+        fecharModal('modal-add-professor');
+        fecharModal('modal-edit-professor');
+
+        const id = btn.getAttribute('data-id');
+        document.getElementById('delete-id').value = id;
+        document.getElementById('modal-delete-professor').style.display = 'block';
+    }
+
+    window.onclick = function(event) {
+        if (event.target.className === 'modal') {
+            event.target.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>

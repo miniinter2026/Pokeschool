@@ -2,18 +2,23 @@ package com.example.pokeschool.servlets;
 
 import com.example.pokeschool.dao.AlunoDAO;
 import com.example.pokeschool.dao.AvaliacaoDAO;
+import com.example.pokeschool.dao.ObservacoesDAO;
 import com.example.pokeschool.model.Aluno;
 import com.example.pokeschool.model.Avaliacao;
+import com.example.pokeschool.model.Observacoes;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/professor/notas")
-public class ProfessorNotasServlet extends HttpServlet {
+@WebServlet("/professor/dashboard")
+public class ProfessorDashboardServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,6 +39,7 @@ public class ProfessorNotasServlet extends HttpServlet {
         String raStr = request.getParameter("ra");
 
         List<Avaliacao> listaAvaliacao = null;
+        List<Observacoes> listaObservacoes = null;
         Aluno alunoSelecionado = null;
 
         if (raStr != null && !raStr.isEmpty()) {
@@ -43,60 +49,18 @@ public class ProfessorNotasServlet extends HttpServlet {
             AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
             listaAvaliacao = avaliacaoDAO.listarPorAlunoERa(ra, disciplinaId);
 
+            ObservacoesDAO obsDAO = new ObservacoesDAO();
+            listaObservacoes = obsDAO.listarPorAlunoERa(ra, disciplinaId);
+
             alunoSelecionado = alunoDAO.buscarPorRa(ra);
         }
 
         request.setAttribute("listaAvaliacao", listaAvaliacao);
+        request.setAttribute("listaObservacoes", listaObservacoes);
         request.setAttribute("alunoSelecionado", alunoSelecionado);
         request.setAttribute("raSelecionado", raStr);
 
         request.getRequestDispatcher("/professor/professorDashboard.jsp")
                 .forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String acao = request.getParameter("acao");
-        int ra = Integer.parseInt(request.getParameter("ra"));
-
-        AvaliacaoDAO dao = new AvaliacaoDAO();
-
-        if ("inserir".equals(acao)) {
-
-            int disciplinaId = Integer.parseInt(request.getParameter("disciplinaId"));
-            double n1 = Double.parseDouble(request.getParameter("n1"));
-            double n2 = Double.parseDouble(request.getParameter("n2"));
-
-            Avaliacao av = new Avaliacao();
-            av.setIdAluno(ra);
-            av.setIdDisciplina(disciplinaId);
-            av.setN1(n1);
-            av.setN2(n2);
-
-            dao.salvar(av);
-        }
-
-        else if ("editar".equals(acao)) {
-
-            int idBoletim = Integer.parseInt(request.getParameter("idBoletim"));
-            double n1 = Double.parseDouble(request.getParameter("n1"));
-            double n2 = Double.parseDouble(request.getParameter("n2"));
-
-            Avaliacao av = new Avaliacao();
-            av.setIdBoletim(idBoletim);
-            av.setN1(n1);
-            av.setN2(n2);
-
-            dao.atualizar(av);
-        }
-
-        else if ("excluir".equals(acao)) {
-
-            int id = Integer.parseInt(request.getParameter("id"));
-            dao.deletar(id);
-        }
-
-        response.sendRedirect("notas?ra=" + ra);
     }
 }

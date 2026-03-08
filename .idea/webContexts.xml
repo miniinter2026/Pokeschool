@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/adminProfessores.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/area-restrita/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp/area-restrita" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/boletim.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/professorBoletim.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/professorNotas.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
