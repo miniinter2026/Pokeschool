@@ -11,7 +11,15 @@
     />
   </head>
   <body>
+  <img src="../assets/img/mew2.png" class="mew2" style="
+    position: absolute;
+    width: 270px;
+    right: 425px;
+    top: 15%;
+    z-index: 2;
+"/>
     <div class="container">
+      <h2>Verificar Código</h2>
       <form action="${pageContext.request.contextPath}/recuperar-senha" method="POST">
         
         <input type="hidden" name="acao" value="verificar">
@@ -21,5 +29,11 @@
         <button type="submit">Verificar</button>
     </form>
     </div>
+  <img src="../assets/img/mew1.png" class="mew1" style="
+    position: absolute;
+    width: 200px;
+    left: 450px;
+    top: 48%;
+"/>
   </body>
 </html>

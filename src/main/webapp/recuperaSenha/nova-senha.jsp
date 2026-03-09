@@ -7,6 +7,13 @@
     <link rel="stylesheet" type="text/css" href="../Styles/nova-senha.css" />
   </head>
   <body>
+  <img src="../assets/img/mew2.png" class="mew2" style="
+    position: absolute;
+    width: 270px;
+    right: 425px;
+    top: 15%;
+    z-index: 2;
+"/>
     <div class="container">
       <h2>Redefinir Senha</h2>
 
@@ -24,7 +31,12 @@
         <button type="submit">Atualizar Senha</button>
     </form>
     </div>
-
+  <img src="../assets/img/mew1.png" class="mew1" style="
+    position: absolute;
+    width: 200px;
+    left: 450px;
+    top: 48%;
+"/>
     <script>
     // Pega o token da URL
     const urlParams = new URLSearchParams(window.location.search);
