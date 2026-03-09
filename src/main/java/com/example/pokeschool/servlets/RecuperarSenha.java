@@ -39,7 +39,7 @@ public class RecuperarSenha extends HttpServlet {
             // CORRIGIDO: adicionar pasta "recuperaSenha/"
             response.sendRedirect("recuperaSenha/nova-senha.jsp?token=" + token);
         } else {
-            response.getWriter().write("Token inválido ou expirado!");
+            response.sendRedirect(request.getContextPath() + "html/erroTokenInvalidoOuExpirado.html");
         }
     }
 
@@ -56,7 +56,7 @@ public class RecuperarSenha extends HttpServlet {
 
         // 🔧 CORREÇÃO: Tratar caso acao seja null
         if (acao == null) {
-            response.getWriter().write("Parâmetro 'acao' é obrigatório!");
+            response.sendRedirect(request.getContextPath() + "html/parametroObrigatorio.html");
             return;
         }
 
@@ -71,7 +71,7 @@ public class RecuperarSenha extends HttpServlet {
                 atualizarSenha(request, response);
                 break;
             default:
-                response.getWriter().write("Ação inválida!");
+                response.sendRedirect(request.getContextPath() + "html/acaoInvalida.html");
         }
     }
 
@@ -83,7 +83,7 @@ public class RecuperarSenha extends HttpServlet {
         System.out.println("TOKEN RECEBIDO: " + token);
 
         if (token == null || token.isEmpty()) {
-            response.getWriter().write("Token é obrigatório!");
+            response.sendRedirect(request.getContextPath() + "html/tokenObrigatorio.html");
             return;
         }
 
@@ -92,17 +92,17 @@ public class RecuperarSenha extends HttpServlet {
         Token tokenObj = tokenDAO.buscarPorToken(token);
 
         if (tokenObj == null) {
-            response.getWriter().write("Token inválido!");
+            response.sendRedirect(request.getContextPath() + "html/tokenInvalido.html");
             return;
         }
 
         if (tokenObj.isUtilizado()) {
-            response.getWriter().write("Token já utilizado!");
+            response.sendRedirect(request.getContextPath() + "html/tokenJaUtilizado.html");
             return;
         }
 
         if (tokenObj.getDataExpiracao().isBefore(LocalDateTime.now())) {
-            response.getWriter().write("Token expirado!");
+            response.sendRedirect(request.getContextPath() + "html/tokenExpirado.html");
             return;
         }
 
@@ -117,7 +117,7 @@ public class RecuperarSenha extends HttpServlet {
 
         String email = request.getParameter("email");
         if (email == null || email.isEmpty()) {
-            response.getWriter().write("Email é obrigatório!");
+            response.sendRedirect(request.getContextPath() + "html/emailObrigatorio.html");
             return;
         }
         // No método solicitarToken(), no início:
@@ -134,7 +134,7 @@ public class RecuperarSenha extends HttpServlet {
             ResultSet rs = checkStmt.executeQuery();
 
             if (!rs.next()) {
-                response.getWriter().write("Email não encontrado!");
+                response.sendRedirect(request.getContextPath() + "html/emailNaoEncontrado.html");
                 return;
             }
 
@@ -153,12 +153,12 @@ public class RecuperarSenha extends HttpServlet {
             if (emailEnviado) {
                 response.sendRedirect("recuperaSenha/verificar-token.jsp");
             } else {
-                response.getWriter().write("Erro ao enviar email. Tente novamente.");
+                response.sendRedirect(request.getContextPath() + "html/erroAoEnviarEmail.html");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            response.getWriter().write("Erro ao gerar token!");
+            response.sendRedirect(request.getContextPath() + "html/erroToken.html");
         } finally {
             banco.desconectar(conn);
         }
@@ -194,16 +194,16 @@ public class RecuperarSenha extends HttpServlet {
         String novaSenha = request.getParameter("novaSenha");
 
         if (token == null || token.trim().isEmpty()) {
-            response.getWriter().write("Token inválido!");
+            response.sendRedirect(request.getContextPath() + "html/tokenInvalido.html");
             return;
         }
         if (token == null || novaSenha == null) {
-            response.getWriter().write("Token e nova senha são obrigatórios!");
+            response.sendRedirect(request.getContextPath() + "html/tokenESenhaObrigatorios.html");
             return;
         }
 
         if (!validarToken(token)) {
-            response.getWriter().write("Token inválido ou expirado!");
+            response.sendRedirect(request.getContextPath() + "html/tokenInvalido.html");
             return;
         }
 
@@ -222,7 +222,7 @@ public class RecuperarSenha extends HttpServlet {
             }
 
             if (email == null) {
-                response.getWriter().write("Erro ao encontrar usuário!");
+                response.sendRedirect(request.getContextPath() + "html/erroUsuario.html");
                 return;
             }
 
@@ -250,7 +250,7 @@ public class RecuperarSenha extends HttpServlet {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            response.getWriter().write("Erro ao atualizar senha!");
+            response.sendRedirect(request.getContextPath() + "html/erroAlterarSenha.html");
         } finally {
             banco.desconectar(conn);
         }
