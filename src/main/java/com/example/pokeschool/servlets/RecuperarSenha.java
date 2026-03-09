@@ -127,7 +127,7 @@ public class RecuperarSenha extends HttpServlet {
             conn = banco.conectar();
 
             // Verificar se email existe
-            String checkSql = "SELECT id FROM aluno WHERE email = ? UNION SELECT id FROM professor WHERE email = ?";
+            String checkSql = "SELECT ra FROM aluno WHERE email = ? UNION SELECT id FROM professor WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkSql);
             checkStmt.setString(1, email);
             checkStmt.setString(2, email);
@@ -246,7 +246,7 @@ public class RecuperarSenha extends HttpServlet {
             updateTokenStmt.setString(1, token);
             updateTokenStmt.executeUpdate();
 
-            response.sendRedirect(request.getContextPath() + "/login.jsp?sucesso=senhaAtualizada");
+            response.sendRedirect(request.getContextPath() + "/index.jsp?sucesso=senhaAtualizada");
 
         } catch (SQLException e) {
             e.printStackTrace();

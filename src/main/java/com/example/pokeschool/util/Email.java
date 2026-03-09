@@ -29,28 +29,99 @@ public class Email {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(EMAIL_ORIGEM));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDestino));
-            message.setSubject("Código de Recuperação de Senha - Remember");
+            message.setSubject("Código de Recuperação de Senha - PokeSchool");
 
             String corpoEmail =
                     "<!DOCTYPE html>" +
                             "<html>" +
                             "<head>" +
+                            "  <meta charset='UTF-8'>" +
                             "  <style>" +
-                            "    body { font-family: Arial, sans-serif; background-color: #f4f4f4; }" +
-                            "    .container { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; }" +
-                            "    .token { font-size: 32px; letter-spacing: 5px; color: #333; font-weight: bold; text-align: center; margin: 20px 0; }" +
-                            "    .aviso { color: #666; font-size: 14px; }" +
+                            "    body {" +
+                            "      font-family: Arial, sans-serif;" +
+                            "      background-color: #f4f4f4;" +
+                            "      margin: 0;" +
+                            "      padding: 0;" +
+                            "    }" +
+
+                            "    .header {" +
+                            "      background-color: #b30000;" +
+                            "      color: white;" +
+                            "      text-align: center;" +
+                            "      padding: 20px;" +
+                            "      font-size: 22px;" +
+                            "      font-weight: bold;" +
+                            "    }" +
+
+                            "    .container {" +
+                            "      max-width: 500px;" +
+                            "      margin: 30px auto;" +
+                            "      background: white;" +
+                            "      padding: 30px;" +
+                            "      border-radius: 10px;" +
+                            "      box-shadow: 0 4px 10px rgba(0,0,0,0.1);" +
+                            "      text-align: center;" +
+                            "    }" +
+
+                            "    h2 {" +
+                            "      color: #111;" +
+                            "      margin-bottom: 10px;" +
+                            "    }" +
+
+                            "    p {" +
+                            "      color: #444;" +
+                            "      font-size: 15px;" +
+                            "    }" +
+
+                            "    .token {" +
+                            "      font-size: 34px;" +
+                            "      letter-spacing: 6px;" +
+                            "      background-color: #111;" +
+                            "      color: white;" +
+                            "      padding: 15px;" +
+                            "      border-radius: 8px;" +
+                            "      margin: 25px auto;" +
+                            "      width: fit-content;" +
+                            "      font-weight: bold;" +
+                            "    }" +
+
+                            "    .aviso {" +
+                            "      color: #777;" +
+                            "      font-size: 13px;" +
+                            "      margin-top: 15px;" +
+                            "    }" +
+
+                            "    .footer {" +
+                            "      text-align: center;" +
+                            "      font-size: 12px;" +
+                            "      color: #999;" +
+                            "      margin-top: 20px;" +
+                            "    }" +
                             "  </style>" +
                             "</head>" +
+
                             "<body>" +
+
+                            "  <div class='header'>" +
+                            "    Plataforma Escolar" +
+                            "  </div>" +
+
                             "  <div class='container'>" +
                             "    <h2>Recuperação de Senha</h2>" +
-                            "    <p>Você solicitou a recuperação de senha.</p>" +
-                            "    <p>Seu código de verificação é:</p>" +
+
+                            "    <p>Recebemos uma solicitação para redefinir sua senha.</p>" +
+                            "    <p>Utilize o código abaixo para continuar:</p>" +
+
                             "    <div class='token'>" + token + "</div>" +
-                            "    <p class='aviso'>Este código expira em 2 horas.</p>" +
-                            "    <p class='aviso'>Se você não solicitou isso, ignore este email.</p>" +
+
+                            "    <p class='aviso'>Este código expira em <b>2 horas</b>.</p>" +
+                            "    <p class='aviso'>Se você não solicitou a recuperação de senha, ignore este e-mail.</p>" +
                             "  </div>" +
+
+                            "  <div class='footer'>" +
+                            "    © Plataforma Escolar - Sistema acadêmico" +
+                            "  </div>" +
+
                             "</body>" +
                             "</html>";
 

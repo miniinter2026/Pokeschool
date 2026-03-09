@@ -102,7 +102,7 @@ public class Cadastro extends HttpServlet {
                 if (sucesso) {
                     System.out.println("Aluno cadastrado com sucesso!");
                     // Redireciona para o login (redirect para evitar reenvio do formulário)
-                    response.sendRedirect("home-aluno.jsp");
+                    response.sendRedirect("aluno/home-aluno.jsp");
                 } else {
                     System.out.println("Falha ao cadastrar aluno");
                     request.setAttribute("erro", "Falha ao cadastrar aluno");
@@ -130,7 +130,7 @@ public class Cadastro extends HttpServlet {
 
                 if (sucesso) {
                     System.out.println("Professor cadastrado com sucesso!");
-                    response.sendRedirect("home-aluno.jsp");
+                    response.sendRedirect("professor/professorDashboard.jsp");
                 } else {
                     System.out.println("Falha ao cadastrar professor");
                     request.setAttribute("erro", "Falha ao cadastrar professor");

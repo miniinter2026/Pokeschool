@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PokeSchool | Cadastro</title>
-    <link rel="stylesheet" type="text/css" href="../Styles/sing-up.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/sign-up.css" />
 </head>
 <body>
 <!-- Login Forms -->
@@ -16,10 +16,10 @@
     </h1>
     <img src="../assets/img/LogoPokeSchool.png" class="logo">
     <form action="${pageContext.request.contextPath}/CadastroAluno" method="post">
-        <input type="text" name="ra" placeholder="RA" required>
+        <input type="text" name="ra" class="ra" placeholder="RA" required>
         <input type="text" name="nomeCompleto" placeholder="Nome" required>
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="senha" placeholder="Senha" required>
+        <input type="email" name="email" class="email" placeholder="Email" required>
+        <input type="password" name="senha" class="senha" placeholder="Senha" required>
         <input type="number" name="idSala" placeholder="Sala" required>
         <button type="submit">Cadastrar</button>
         <p>Já tem conta? <a href="../index.jsp">Faça Login</a></p>
@@ -49,7 +49,8 @@
     const senha = document.querySelector(".senha");
     const email = document.querySelector(".email");
 
-    const raRegex = /^\\d{5,6}$/;
+
+    const raRegex = /^\d{5,6}$/;
     const senhaRegex =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

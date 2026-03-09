@@ -29,7 +29,7 @@ public class Login extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            System.out.println("🔵 Acessando página de login (GET)");
+            System.out.println("Acessando página de login (GET)");
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
 
@@ -52,10 +52,10 @@ public class Login extends HttpServlet {
             String usuario = request.getParameter("usuario");
             String senha = request.getParameter("senha");
 
-            System.out.println("🔵 Tentativa de login com usuário: " + usuario);
+            System.out.println("Tentativa de login com usuário: " + usuario);
 
             String tipo = identificarTipo(usuario);
-            System.out.println("🔵 Tipo identificado: " + tipo);
+            System.out.println("Tipo identificado: " + tipo);
 
             if (usuario == null || usuario.isEmpty() || senha == null || senha.isEmpty()) {
                 System.out.println("❌ Usuário ou senha vazios");
@@ -68,7 +68,7 @@ public class Login extends HttpServlet {
             if (tipo.equals("ALUNO")) {
                 AlunoDAO alunoDAO = new AlunoDAO();
                 int ra = Integer.parseInt(usuario);
-                System.out.println("🔵 RA do aluno: " + ra);
+                System.out.println("RA do aluno: " + ra);
 
                 boolean loginValido = false;
                 try {
@@ -91,18 +91,18 @@ public class Login extends HttpServlet {
 
             } else if (tipo.equals("PROFESSOR")) {
                 ProfessorDAO professorDAO = new ProfessorDAO();
-                System.out.println("🔵 Verificando login de professor: " + usuario);
+                System.out.println("Verificando login de professor: " + usuario);
 
                 Professor professor = null;
 
                 try {
                     professor = professorDAO.login(usuario, senha);
-                    System.out.println("🔵 Professor retornado: " + (professor != null ? "SIM ✅" : "NÃO ❌"));
+                    System.out.println("Professor retornado: " + (professor != null ? "SIM ✅" : "NÃO ❌"));
                     if (professor != null) {
-                        System.out.println("🔵 ID: " + professor.getId());
-                        System.out.println("🔵 Nome: " + professor.getNomeCompleto());
-                        System.out.println("🔵 Disciplina ID: " + professor.getIdDisciplina());
-                        System.out.println("🔵 Disciplina Nome: " + professor.getNomeDisciplina());
+                        System.out.println("ID: " + professor.getId());
+                        System.out.println("Nome: " + professor.getNomeCompleto());
+                        System.out.println("Disciplina ID: " + professor.getIdDisciplina());
+                        System.out.println("Disciplina Nome: " + professor.getNomeDisciplina());
                     }
                 } catch (Exception e) {
                     System.err.println("❌ Erro ao verificar login de professor: " + e.getMessage());
