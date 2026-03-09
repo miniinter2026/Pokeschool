@@ -3,4 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
+
+    <!-- Página para erro 404 -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/html/paginaNaoEncontrada.html</location>
+    </error-page>
+
+    <!-- Página para erro 500 -->
+    <error-page>
+        <error-code>500</error-code>
+        <location>/html/erroInterno.html</location>
+    </error-page>
 </web-app>
