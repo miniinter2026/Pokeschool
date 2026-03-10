@@ -31,7 +31,7 @@ public class AlunoNotasServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.getWriter().println("Erro ao carregar notas.");
+            response.sendRedirect(request.getContextPath() + "html/erroNotas.html");
         }
     }
 }

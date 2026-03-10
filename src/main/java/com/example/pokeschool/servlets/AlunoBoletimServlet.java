@@ -30,7 +30,7 @@ public class AlunoBoletimServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.getWriter().println("Erro ao carregar boletim.");
+            response.sendRedirect(request.getContextPath() + "html/erroBoletim.html");
         }
     }
 }
