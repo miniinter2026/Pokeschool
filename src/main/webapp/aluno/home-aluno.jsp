@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.pokeschool.model.Avaliacao" %>
 <%@ page import="com.example.pokeschool.model.Observacoes" %>
+<%@ page import="com.example.pokeschool.model.Aluno" %>
 
 <!DOCTYPE html>
 <html>
@@ -14,10 +15,16 @@
 <div class="layout">
 
     <!-- SIDEBAR -->
+    <%
+        List<Aluno> listaAlunos = (List<Aluno>)
+                request.getAttribute("listaAlunos");
+    %>
+    <% if (listaAlunos !=null) { for (Aluno a : listaAlunos)
+    { %>
     <aside class="sidebar">
         <div class="profile">
             <img src="../assets/img/pikachu.jpg" alt="Perfil">
-            <h3>Pikachu</h3>
+            <h3><%= a.getNomeCompleto() %></h3>
         </div>
 
         <nav>
