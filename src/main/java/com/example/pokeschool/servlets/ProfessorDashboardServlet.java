@@ -23,46 +23,47 @@ import java.util.List;
 )
 public class ProfessorDashboardServlet extends HttpServlet {
 
+    @Override
+    public void init() throws ServletException {
+        System.out.println("✅ ProfessorDashboardServlet INICIADO!");
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("professorId") == null) {
-            response.sendRedirect("login");
+            System.out.println("❌ Professor não logado, redirecionando para login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         Integer disciplinaId = (Integer) session.getAttribute("professorDisciplina");
+        Integer professorId = (Integer) session.getAttribute("professorId");
+
+        System.out.println("🔵 Professor ID: " + professorId);
+        System.out.println("🔵 Disciplina ID: " + disciplinaId);
 
         AlunoDAO alunoDAO = new AlunoDAO();
-        List<Aluno> listaAlunos = alunoDAO.listar();
-        request.setAttribute("listaAlunos", listaAlunos);
+        String termoBusca = request.getParameter("busca");
 
-        String raStr = request.getParameter("ra");
-
-        List<Avaliacao> listaAvaliacao = null;
-        List<Observacoes> listaObservacoes = null;
-        Aluno alunoSelecionado = null;
-
-        if (raStr != null && !raStr.isEmpty()) {
-
-            int ra = Integer.parseInt(raStr);
-
-            AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
-            listaAvaliacao = avaliacaoDAO.listarPorAlunoERa(ra, disciplinaId);
-
-            ObservacoesDAO obsDAO = new ObservacoesDAO();
-            listaObservacoes = obsDAO.listarPorAlunoERa(ra, disciplinaId);
-
-            alunoSelecionado = alunoDAO.buscarPorRa(ra);
+        List<Aluno> listaAlunos;
+        if (termoBusca != null && !termoBusca.isEmpty()) {
+            listaAlunos = alunoDAO.buscarPorNomeOuRa(termoBusca);
+        } else {
+            listaAlunos = alunoDAO.listar();
         }
 
-        request.setAttribute("listaAvaliacao", listaAvaliacao);
-        request.setAttribute("listaObservacoes", listaObservacoes);
-        request.setAttribute("alunoSelecionado", alunoSelecionado);
-        request.setAttribute("raSelecionado", raStr);
+        System.out.println("🔵 Total de alunos: " + listaAlunos.size());
 
+        request.setAttribute("listaAlunos", listaAlunos);
+        request.setAttribute("termoBusca", termoBusca);
+        request.setAttribute("disciplinaId", disciplinaId);
+        request.setAttribute("professorId", professorId);
+
+        System.out.println("✅ Forward para professorDashboard.jsp");
         request.getRequestDispatcher("/professor/professorDashboard.jsp")
                 .forward(request, response);
     }

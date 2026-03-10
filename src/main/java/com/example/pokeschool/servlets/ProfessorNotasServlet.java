@@ -18,56 +18,62 @@ import java.util.List;
 )
 public class ProfessorNotasServlet extends HttpServlet {
 
+    @Override
+    public void init() throws ServletException {
+        System.out.println("✅ ProfessorNotasServlet INICIADO!");
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("professorId") == null) {
-            response.sendRedirect("login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         Integer disciplinaId = (Integer) session.getAttribute("professorDisciplina");
+        Integer professorId = (Integer) session.getAttribute("professorId");
 
         AlunoDAO alunoDAO = new AlunoDAO();
-        List<Aluno> listaAlunos = alunoDAO.listar();
-        request.setAttribute("listaAlunos", listaAlunos);
+        String termoBusca = request.getParameter("busca");
 
-        String raStr = request.getParameter("ra");
-
-        List<Avaliacao> listaAvaliacao = null;
-        Aluno alunoSelecionado = null;
-
-        if (raStr != null && !raStr.isEmpty()) {
-
-            int ra = Integer.parseInt(raStr);
-
-            AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
-            listaAvaliacao = avaliacaoDAO.listarPorAlunoERa(ra, disciplinaId);
-
-            alunoSelecionado = alunoDAO.buscarPorRa(ra);
+        List<Aluno> listaAlunos;
+        if (termoBusca != null && !termoBusca.isEmpty()) {
+            listaAlunos = alunoDAO.buscarPorNomeOuRa(termoBusca);
+        } else {
+            listaAlunos = alunoDAO.listar();
         }
 
-        request.setAttribute("listaAvaliacao", listaAvaliacao);
-        request.setAttribute("alunoSelecionado", alunoSelecionado);
-        request.setAttribute("raSelecionado", raStr);
+        request.setAttribute("listaAlunos", listaAlunos);
+        request.setAttribute("termoBusca", termoBusca);
+        request.setAttribute("disciplinaId", disciplinaId);
+        request.setAttribute("professorId", professorId);
 
         request.getRequestDispatcher("/professor/professorDashboard.jsp")
                 .forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("professorId") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
         String acao = request.getParameter("acao");
         int ra = Integer.parseInt(request.getParameter("ra"));
+        Integer disciplinaId = (Integer) session.getAttribute("professorDisciplina");
+        Integer professorId = (Integer) session.getAttribute("professorId");
 
         AvaliacaoDAO dao = new AvaliacaoDAO();
 
         if ("inserir".equals(acao)) {
-
-            int disciplinaId = Integer.parseInt(request.getParameter("disciplinaId"));
             double n1 = Double.parseDouble(request.getParameter("n1"));
             double n2 = Double.parseDouble(request.getParameter("n2"));
 
@@ -81,7 +87,6 @@ public class ProfessorNotasServlet extends HttpServlet {
         }
 
         else if ("editar".equals(acao)) {
-
             int idBoletim = Integer.parseInt(request.getParameter("idBoletim"));
             double n1 = Double.parseDouble(request.getParameter("n1"));
             double n2 = Double.parseDouble(request.getParameter("n2"));
@@ -95,11 +100,15 @@ public class ProfessorNotasServlet extends HttpServlet {
         }
 
         else if ("excluir".equals(acao)) {
-
             int id = Integer.parseInt(request.getParameter("id"));
             dao.deletar(id);
         }
 
-        response.sendRedirect("notas?ra=" + ra);
+        String termoBusca = request.getParameter("busca");
+        if (termoBusca != null && !termoBusca.isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/professor/dashboard?busca=" + termoBusca);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/professor/dashboard");
+        }
     }
 }

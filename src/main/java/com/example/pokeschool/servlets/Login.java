@@ -80,8 +80,13 @@ public class Login extends HttpServlet {
 
                 if (loginValido) {
                     System.out.println("✅ Login de aluno válido!");
-                    RequestDispatcher rd = request.getRequestDispatcher("aluno/home-aluno.jsp");
-                    rd.forward(request, response);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("alunoRa", ra);
+                    session.setAttribute("alunoNome", alunoDAO.buscarPorRa(ra).getNomeCompleto());
+                    session.setAttribute("aluno", alunoDAO.buscarPorRa(ra));
+
+                    // ✅ REDIRECIONAR PARA HOME DO ALUNO
+                    response.sendRedirect(request.getContextPath() + "/aluno/home-aluno.jsp");
                 } else {
                     System.out.println("❌ Login de aluno inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
@@ -120,8 +125,8 @@ public class Login extends HttpServlet {
                     session.setAttribute("professorNomeDisciplina", professor.getNomeDisciplina());
                     session.setAttribute("professor", professor);
 
-                    // ✅ REDIRECIONAR PARA DASHBOARD (MUDANÇA AQUI)
-                    response.sendRedirect("professor/dashboard");
+                    // ✅ REDIRECIONAR PARA DASHBOARD (CORRIGIDO)
+                    response.sendRedirect(request.getContextPath() + "/professor/dashboard");
                 } else {
                     System.out.println("❌ Login de professor inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
@@ -143,8 +148,11 @@ public class Login extends HttpServlet {
 
                 if (loginValido) {
                     System.out.println("✅ Login de administrador válido!");
-                    RequestDispatcher rd = request.getRequestDispatcher("area-restrita/index.jsp");
-                    rd.forward(request, response);
+                    HttpSession session = request.getSession();
+                    session.setAttribute("adminUsuario", usuario);
+
+                    // ✅ REDIRECIONAR PARA AREA RESTRITA (CORRIGIDO)
+                    response.sendRedirect(request.getContextPath() + "/area-restrita/index.jsp");
                 } else {
                     System.out.println("❌ Login de administrador inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");

@@ -52,7 +52,7 @@ public class AlunoDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            System.out.println("✅ Conectado ao banco!"); // DEBUG
+            System.out.println("✅ Conectado ao banco!");
 
             while (rs.next()) {
                 Aluno a = new Aluno();
@@ -64,7 +64,48 @@ public class AlunoDAO {
                 lista.add(a);
             }
 
-            System.out.println("✅ Total de alunos: " + lista.size()); // DEBUG
+            System.out.println("✅ Total de alunos: " + lista.size());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Conexao.desconectar(conn);
+        }
+        return lista;
+    }
+
+    // ✅ NOVO MÉTODO: Buscar por RA ou Nome
+    public List<Aluno> buscarPorNomeOuRa(String termo) {
+        List<Aluno> lista = new ArrayList<>();
+        String sql = "SELECT * FROM aluno WHERE ra::text LIKE ? OR nome_completo LIKE ?";
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = Conexao.conectar();
+            String busca = "%" + termo + "%";
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, busca);
+            ps.setString(2, busca);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Aluno a = new Aluno();
+                a.setRa(rs.getInt("ra"));
+                a.setNomeCompleto(rs.getString("nome_completo"));
+                a.setEmail(rs.getString("email"));
+                a.setSenha(rs.getString("senha"));
+                a.setIdSala(rs.getInt("sala"));
+                lista.add(a);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
