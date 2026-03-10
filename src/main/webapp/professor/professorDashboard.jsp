@@ -10,121 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <title>PokeSchool - Dashboard Professor</title>
-    <style>
-        body {
-            font-family: Arial;
-            background: #f5f5f5;
-            margin: 0;
-        }
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-        }
-        .profile {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .profile img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-        }
-        .nav-btn {
-            display: block;
-            padding: 12px;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .nav-btn:hover {
-            background: #34495e;
-        }
-        .nav-btn.active {
-            background: #4CAF50;
-        }
-        .nav-btn.logout {
-            background: #f44336;
-            margin-top: 20px;
-        }
-        .content {
-            flex: 1;
-            padding: 30px;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-        }
-        .section {
-            display: none;
-        }
-        .active-section {
-            display: block;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        th {
-            background: #4CAF50;
-            color: white;
-        }
-        .btn {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-primary { background: #4CAF50; color: white; }
-        .btn-edit { background: #2196F3; color: white; }
-        .btn-danger { background: #f44336; color: white; }
-        .btn-add { background: #4CAF50; color: white; margin-bottom: 10px; }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background: white;
-            margin: 10% auto;
-            padding: 25px;
-            width: 400px;
-            border-radius: 8px;
-        }
-        .close {
-            float: right;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .aprovado { color: green; font-weight: bold; }
-        .reprovado { color: red; font-weight: bold; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/professorDashboard.css">
 </head>
 <body>
 
@@ -186,7 +72,7 @@
             <!-- ================= NOTAS ================= -->
             <section id="notas" class="section">
                 <h2>Notas</h2>
-                <form method="get" action="professor/notas">
+                <form method="get" action="${pageContext.request.contextPath}/professor/notas">
                     <select name="ra" onchange="this.form.submit()">
                         <option value="">Selecione aluno</option>
                         <%
@@ -257,7 +143,7 @@
             <!-- ================= OBSERVAÇÕES ================= -->
             <section id="observacoes" class="section">
                 <h2>Observações</h2>
-                <form method="get" action="professor/observacoes">
+                <form method="get" action="${pageContext.request.contextPath}/professor/observacoes">
                     <select name="ra" onchange="this.form.submit()">
                         <option value="">Selecione aluno</option>
                         <%
@@ -295,21 +181,22 @@
                         <td><%= o.getNomeDisciplina() %></td>
                         <td><%= o.getNomeProfessor() %></td>
                         <td><%= o.getDescricao() %></td>
+
                         <td>
-                            <button class="btn btn-edit"
-                                onclick="editarObs('<%= o.getId() %>', '<%= o.getDescricao().replace("'", "\\'") %>')">
-                                Editar
-                            </button>
-                            <button class="btn btn-danger"
-                                onclick="deleteObs('<%= o.getId() %>')">
-                                Excluir
-                            </button>
-                        </td>
-                    </tr>
-                    <%
-                            }
+    <button class="btn btn-edit"
+        onclick="editarObs('<%= o.getId() %>', '<%= o.getDescricao().replace("'", "\\'") %>')">
+        Editar
+    </button>
+    <button class="btn btn-danger"
+        onclick="deleteObs('<%= o.getId() %>')">
+        Excluir
+    </button>
+</td>
+</tr>
+<%
                         }
-                    %>
+                    }
+                %>
                 </table>
                 <%
                     }
@@ -325,7 +212,7 @@
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-add')">&times;</span>
         <h3>➕ Nova Nota</h3>
-        <form action="professor/notas" method="post">
+        <form action="${pageContext.request.contextPath}/professor/notas" method="post">
             <input type="hidden" name="acao" value="inserir">
             <input type="hidden" name="ra" value="<%= alunoSelecionado != null ? alunoSelecionado.getRa() : "" %>">
             <div class="form-group">
@@ -357,7 +244,7 @@
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-edit')">&times;</span>
         <h3>✏️ Editar Nota</h3>
-        <form action="professor/notas" method="post">
+        <form action="${pageContext.request.contextPath}/professor/notas" method="post">
             <input type="hidden" name="acao" value="editar">
             <input type="hidden" name="idBoletim" id="edit-id">
             <input type="hidden" name="ra" value="<%= alunoSelecionado != null ? alunoSelecionado.getRa() : "" %>">
@@ -379,7 +266,7 @@
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-add-obs')">&times;</span>
         <h3>➕ Nova Observação</h3>
-        <form action="professor/observacoes" method="post">
+        <form action="${pageContext.request.contextPath}/professor/observacoes" method="post">
             <input type="hidden" name="acao" value="inserir">
             <input type="hidden" name="ra" value="<%= alunoSelecionado != null ? alunoSelecionado.getRa() : "" %>">
             <div class="form-group">
@@ -407,7 +294,7 @@
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-edit-obs')">&times;</span>
         <h3>✏️ Editar Observação</h3>
-        <form action="professor/observacoes" method="post">
+        <form action="${pageContext.request.contextPath}/professor/observacoes" method="post">
             <input type="hidden" name="acao" value="editar">
             <input type="hidden" name="id" id="edit-id-obs">
             <input type="hidden" name="ra" value="<%= alunoSelecionado != null ? alunoSelecionado.getRa() : "" %>">
@@ -426,7 +313,7 @@
         <span class="close" onclick="fecharModal('modal-delete-obs')">&times;</span>
         <h3>🗑️ Confirmar Exclusão</h3>
         <p>Tem certeza que deseja excluir esta observação?</p>
-        <form action="professor/observacoes" method="post">
+        <form action="${pageContext.request.contextPath}/professor/observacoes" method="post">
             <input type="hidden" name="acao" value="excluir">
             <input type="hidden" name="id" id="delete-id-obs">
             <input type="hidden" name="ra" value="<%= alunoSelecionado != null ? alunoSelecionado.getRa() : "" %>">
@@ -485,7 +372,7 @@
     // ✅ EXCLUIR NOTA
     function confirmarDelete(id) {
         if (confirm("Tem certeza que deseja excluir esta nota?")) {
-            location.href = "professor/notas?acao=excluir&id=" + id;
+            location.href = "${pageContext.request.contextPath}/professor/notas?acao=excluir&id=" + id;
         }
     }
 
@@ -504,6 +391,5 @@
         }
     }
 </script>
-
 </body>
 </html>

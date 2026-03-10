@@ -12,7 +12,10 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/professor/notas")
+@WebServlet(
+        urlPatterns = {"/professor/notas"},
+        loadOnStartup = 1
+)
 public class ProfessorNotasServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -13,7 +13,10 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 
-@WebServlet("/professor/observacoes")
+@WebServlet(
+        urlPatterns = {"/professor/observacoes"},
+        loadOnStartup = 1
+)
 public class ProfessorObservacoesServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

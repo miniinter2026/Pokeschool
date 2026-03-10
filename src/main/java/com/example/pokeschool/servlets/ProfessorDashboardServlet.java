@@ -17,7 +17,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/professor/dashboard")
+@WebServlet(
+        urlPatterns = {"/professor/dashboard"},
+        loadOnStartup = 1
+)
 public class ProfessorDashboardServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
