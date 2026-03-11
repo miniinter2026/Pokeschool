@@ -14,7 +14,7 @@
         Seja <br />
         Bem vindo!!
     </h1>
-    <img src="../assets/img/LogoPokeSchool.png" class="logo">
+    <img src="${pageContext.request.contextPath}/assets/img/LogoPokeSchool.png" class="logo">
     <form action="${pageContext.request.contextPath}/CadastroAluno" method="post">
         <input type="text" name="ra" class="ra" placeholder="RA" required>
         <input type="text" name="nomeCompleto" placeholder="Nome" required>

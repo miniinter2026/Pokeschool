@@ -119,7 +119,7 @@ public class Email {
                             "  </div>" +
 
                             "  <div class='footer'>" +
-                            "    © Plataforma Escolar - Sistema acadêmico" +
+                            "    © PokeSchool" +
                             "  </div>" +
 
                             "</body>" +

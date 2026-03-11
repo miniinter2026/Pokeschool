@@ -134,7 +134,7 @@ public class RecuperarSenha extends HttpServlet {
             ResultSet rs = checkStmt.executeQuery();
 
             if (!rs.next()) {
-                response.sendRedirect(request.getContextPath() + "html/emailNaoEncontrado.html");
+                response.sendRedirect(request.getContextPath() + "/html/emailNaoEncontrado.html");
                 return;
             }
 
