@@ -12,10 +12,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(
-        urlPatterns = {"/professor/notas"},
-        loadOnStartup = 1
-)
+@WebServlet("/professor/notas")
 public class ProfessorNotasServlet extends HttpServlet {
 
     @Override
@@ -67,48 +64,52 @@ public class ProfessorNotasServlet extends HttpServlet {
         }
 
         String acao = request.getParameter("acao");
-        int ra = Integer.parseInt(request.getParameter("ra"));
         Integer disciplinaId = (Integer) session.getAttribute("professorDisciplina");
-        Integer professorId = (Integer) session.getAttribute("professorId");
 
-        AvaliacaoDAO dao = new AvaliacaoDAO();
+        try {
+            if ("inserir".equals(acao)) {
+                int ra = Integer.parseInt(request.getParameter("ra"));
+                double n1 = Double.parseDouble(request.getParameter("n1"));
+                double n2 = Double.parseDouble(request.getParameter("n2"));
 
-        if ("inserir".equals(acao)) {
-            double n1 = Double.parseDouble(request.getParameter("n1"));
-            double n2 = Double.parseDouble(request.getParameter("n2"));
+                AvaliacaoDAO dao = new AvaliacaoDAO();
+                Avaliacao av = new Avaliacao();
+                av.setIdAluno(ra);
+                av.setIdDisciplina(disciplinaId);
+                av.setN1(n1);
+                av.setN2(n2);
 
-            Avaliacao av = new Avaliacao();
-            av.setIdAluno(ra);
-            av.setIdDisciplina(disciplinaId);
-            av.setN1(n1);
-            av.setN2(n2);
+                dao.salvar(av);
+                System.out.println("✅ Nota inserida para RA: " + ra);
+            }
+            else if ("editar".equals(acao)) {
+                int idBoletim = Integer.parseInt(request.getParameter("idBoletim"));
+                double n1 = Double.parseDouble(request.getParameter("n1"));
+                double n2 = Double.parseDouble(request.getParameter("n2"));
 
-            dao.salvar(av);
+                AvaliacaoDAO dao = new AvaliacaoDAO();
+                Avaliacao av = new Avaliacao();
+                av.setIdBoletim(idBoletim);
+                av.setN1(n1);
+                av.setN2(n2);
+
+                dao.atualizar(av);
+                System.out.println("✅ Nota atualizada ID: " + idBoletim);
+            }
+            else if ("excluir".equals(acao)) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                AvaliacaoDAO dao = new AvaliacaoDAO();
+                dao.deletar(id);
+                System.out.println("✅ Nota excluída ID: " + id);
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Erro no ProfessorNotasServlet: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/html/erro.html");
+            return;
         }
 
-        else if ("editar".equals(acao)) {
-            int idBoletim = Integer.parseInt(request.getParameter("idBoletim"));
-            double n1 = Double.parseDouble(request.getParameter("n1"));
-            double n2 = Double.parseDouble(request.getParameter("n2"));
-
-            Avaliacao av = new Avaliacao();
-            av.setIdBoletim(idBoletim);
-            av.setN1(n1);
-            av.setN2(n2);
-
-            dao.atualizar(av);
-        }
-
-        else if ("excluir".equals(acao)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            dao.deletar(id);
-        }
-
-        String termoBusca = request.getParameter("busca");
-        if (termoBusca != null && !termoBusca.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/professor/dashboard?busca=" + termoBusca);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/professor/dashboard");
-        }
+        // Redireciona de volta para o dashboard
+        response.sendRedirect(request.getContextPath() + "/professor/dashboard");
     }
 }

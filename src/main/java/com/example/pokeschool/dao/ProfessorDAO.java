@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ProfessorDAO {
 
-    // ✅ MÉTODO DE LOGIN COM DISCIPLINA
     public Professor login(String usuario, String senha) {
         Professor professor = null;
         String sql = "SELECT p.id, p.nome_completo, p.nome_usuario, p.senha, p.email, " +
@@ -47,7 +46,6 @@ public class ProfessorDAO {
         return professor;
     }
 
-    // Método para verificar login (retorna boolean)
     public boolean verificaLoginProfessor(String usuario, String senha) {
         String sql = "SELECT COUNT(*) FROM professor WHERE nome_usuario = ? AND senha = ?";
 
@@ -69,7 +67,6 @@ public class ProfessorDAO {
         return false;
     }
 
-    // Método para listar todos os professores
     public List<Professor> listar() {
         List<Professor> lista = new ArrayList<>();
         String sql = "SELECT p.id, p.nome_completo, p.nome_usuario, p.senha, p.email, " +
@@ -104,7 +101,10 @@ public class ProfessorDAO {
         return lista;
     }
 
-    // Método para buscar professor por ID
+    public List<Professor> listarComDisciplinas() {
+        return listar();
+    }
+
     public Professor buscarPorId(int id) {
         Professor professor = null;
         String sql = "SELECT p.id, p.nome_completo, p.nome_usuario, p.senha, p.email, " +
@@ -140,7 +140,31 @@ public class ProfessorDAO {
         return professor;
     }
 
-    // ✅ CORREÇÃO: Método inserir agora retorna boolean
+    // ✅ MÉTODO ADICIONADO: buscarPorUsuario
+    public Professor buscarPorUsuario(String usuario) {
+        Professor professor = null;
+        String sql = "SELECT * FROM professor WHERE nome_usuario = ?";
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, usuario);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                professor = new Professor();
+                professor.setId(rs.getInt("id"));
+                professor.setNomeCompleto(rs.getString("nome_completo"));
+                professor.setNomeUsuario(rs.getString("nome_usuario"));
+                professor.setEmail(rs.getString("email"));
+                professor.setSenha(rs.getString("senha"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return professor;
+    }
+
     public boolean inserir(Professor p) {
         String sql = "INSERT INTO professor (nome_completo, nome_usuario, senha, email) VALUES (?, ?, ?, ?)";
 
@@ -153,38 +177,81 @@ public class ProfessorDAO {
             ps.setString(4, p.getEmail());
 
             int rowsAffected = ps.executeUpdate();
+            System.out.println("✅ ProfessorDAO.inserir: " + rowsAffected + " linha(s) afetada(s)");
             return rowsAffected > 0;
 
         } catch (Exception e) {
+            System.err.println("❌ Erro ao inserir professor: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    // Método para atualizar professor
     public boolean atualizar(Professor p) {
-        String sql = "UPDATE professor SET nome_completo = ?, nome_usuario = ?, senha = ?, email = ? WHERE id = ?";
+        if (p.getSenha() != null && !p.getSenha().isEmpty()) {
+            String sql = "UPDATE professor SET nome_completo = ?, nome_usuario = ?, senha = ?, email = ? WHERE id = ?";
+            try (Connection conn = Conexao.conectar();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        try (Connection conn = Conexao.conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, p.getNomeCompleto());
+                ps.setString(2, p.getNomeUsuario());
+                ps.setString(3, p.getSenha());
+                ps.setString(4, p.getEmail());
+                ps.setInt(5, p.getId());
 
-            ps.setString(1, p.getNomeCompleto());
-            ps.setString(2, p.getNomeUsuario());
-            ps.setString(3, p.getSenha());
-            ps.setString(4, p.getEmail());
-            ps.setInt(5, p.getId());
+                int rowsAffected = ps.executeUpdate();
+                System.out.println("✅ ProfessorDAO.atualizar (com senha): " + rowsAffected + " linha(s) afetada(s)");
+                return rowsAffected > 0;
 
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            } catch (Exception e) {
+                System.err.println("❌ Erro ao atualizar professor (com senha): " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            String sql = "UPDATE professor SET nome_completo = ?, nome_usuario = ?, email = ? WHERE id = ?";
+            try (Connection conn = Conexao.conectar();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+                ps.setString(1, p.getNomeCompleto());
+                ps.setString(2, p.getNomeUsuario());
+                ps.setString(3, p.getEmail());
+                ps.setInt(4, p.getId());
+
+                int rowsAffected = ps.executeUpdate();
+                System.out.println("✅ ProfessorDAO.atualizar (sem senha): " + rowsAffected + " linha(s) afetada(s)");
+                return rowsAffected > 0;
+
+            } catch (Exception e) {
+                System.err.println("❌ Erro ao atualizar professor (sem senha): " + e.getMessage());
+                e.printStackTrace();
+                return false;
+            }
         }
     }
 
-    // Método para excluir professor
     public boolean deletar(int id) {
+        String checkSql = "SELECT id FROM disciplina WHERE id_professor = ?";
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement checkPs = conn.prepareStatement(checkSql)) {
+
+            checkPs.setInt(1, id);
+            ResultSet rs = checkPs.executeQuery();
+
+            if (rs.next()) {
+                System.out.println("⚠️ Professor ID " + id + " possui disciplina vinculada, removendo vínculo primeiro");
+
+                String updateSql = "UPDATE disciplina SET id_professor = NULL WHERE id_professor = ?";
+                try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
+                    updatePs.setInt(1, id);
+                    updatePs.executeUpdate();
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao verificar disciplina do professor: " + e.getMessage());
+            e.printStackTrace();
+        }
+
         String sql = "DELETE FROM professor WHERE id = ?";
 
         try (Connection conn = Conexao.conectar();
@@ -192,9 +259,11 @@ public class ProfessorDAO {
 
             ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
+            System.out.println("✅ ProfessorDAO.deletar: " + rowsAffected + " linha(s) afetada(s)");
             return rowsAffected > 0;
 
         } catch (Exception e) {
+            System.err.println("❌ Erro ao excluir professor: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

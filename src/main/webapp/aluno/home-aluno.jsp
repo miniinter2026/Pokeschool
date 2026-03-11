@@ -16,21 +16,24 @@
 
     <!-- SIDEBAR -->
     <%
-        List<Aluno> listaAlunos = (List<Aluno>)
-                request.getAttribute("listaAlunos");
+        List<Aluno> listaAlunos = (List<Aluno>) request.getAttribute("listaAlunos");
+        Aluno aluno = null;
+        if (listaAlunos != null && !listaAlunos.isEmpty()) {
+            aluno = listaAlunos.get(0);
+        }
     %>
-    <% if (listaAlunos !=null) { for (Aluno a : listaAlunos)
-    { %>
+
     <aside class="sidebar">
         <div class="profile">
-            <img src="../assets/img/pikachu.jpg" alt="Perfil">
-            <h3><%= a.getNomeCompleto() %></h3>
+            <img src="<%= request.getContextPath() %>/assets/img/pikachu.jpg" alt="Perfil">
+            <h3><%= aluno != null ? aluno.getNomeCompleto() : "Aluno" %></h3>
         </div>
 
         <nav>
             <a class="menu-btn active" data-target="notas">NOTAS</a>
             <a class="menu-btn" data-target="observacoes">OBSERVAÇÕES</a>
             <a class="menu-btn" data-target="boletim">BOLETIM</a>
+            <a class="nav-btn logout" href="<%= request.getContextPath() %>/logout">SAIR</a>
         </nav>
     </aside>
 
@@ -52,21 +55,24 @@
                     </tr>
 
                     <%
-                        List<Avaliacao> notas =
-                                (List<Avaliacao>) request.getAttribute("notas");
+                        List<Avaliacao> notas = (List<Avaliacao>) request.getAttribute("notas");
 
-                        if (notas != null) {
-                            for (Avaliacao a : notas) {
+                        if (notas != null && !notas.isEmpty()) {
+                            for (Avaliacao av : notas) {
                     %>
                     <tr>
-                        <td><%= a.getNomeDisciplina() %></td>
-                        <td><%= a.getN1() %></td>
-                        <td><%= a.getN2() %></td>
+                        <td><%= av.getNomeDisciplina() %></td>
+                        <td><%= av.getN1() %></td>
+                        <td><%= av.getN2() %></td>
                     </tr>
                     <%
                             }
-                        }
+                        } else {
                     %>
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Nenhuma nota cadastrada</td>
+                    </tr>
+                    <% } %>
                 </table>
             </section>
 
@@ -76,29 +82,29 @@
                 <h2>Minhas Observações</h2>
 
                 <%
-                    List<Observacoes> lista =
-                            (List<Observacoes>) request.getAttribute("listaObservacoes");
+                    List<Observacoes> observacoes = (List<Observacoes>) request.getAttribute("listaObservacoes");
 
-                    if (lista != null) {
-                        for (Observacoes o : lista) {
+                    if (observacoes != null && !observacoes.isEmpty()) {
+                        for (Observacoes obs : observacoes) {
                 %>
 
                 <div class="obs-card">
-                    <p class="descricao"><%= o.getDescricao() %></p>
+                    <p class="descricao"><%= obs.getDescricao() %></p>
 
                     <div class="obs-footer">
                         <span>
-                            <%= o.getNomeProfessor() != null ?
-                                    o.getNomeProfessor() : "Anônimo" %>
+                            <%= obs.getNomeProfessor() != null ? obs.getNomeProfessor() : "Anônimo" %>
                         </span>
-                        <span><%= o.getData() %></span>
+                        <span><%= obs.getData() %></span>
                     </div>
                 </div>
 
                 <%
                         }
-                    }
+                    } else {
                 %>
+                <p style="text-align: center; color: #888;">Nenhuma observação encontrada</p>
+                <% } %>
             </section>
 
             <!-- ================= BOLETIM ================= -->
@@ -114,26 +120,27 @@
                     </tr>
 
                     <%
-                        if (notas != null) {
-                            for (Avaliacao a : notas) {
-                                double media =
-                                        (a.getN1() + a.getN2()) / 2.0;
-                                String status =
-                                        media >= 7 ? "APROVADO" : "REPROVADO";
-                                String classe =
-                                        media >= 7 ? "aprovado" : "reprovado";
+                        if (notas != null && !notas.isEmpty()) {
+                            for (Avaliacao av : notas) {
+                                double media = (av.getN1() + av.getN2()) / 2.0;
+                                String status = media >= 7 ? "APROVADO" : "REPROVADO";
+                                String classe = media >= 7 ? "aprovado" : "reprovado";
                     %>
 
                     <tr>
-                        <td><%= a.getNomeDisciplina() %></td>
+                        <td><%= av.getNomeDisciplina() %></td>
                         <td><%= String.format("%.1f", media) %></td>
                         <td class="<%= classe %>"><%= status %></td>
                     </tr>
 
                     <%
                             }
-                        }
+                        } else {
                     %>
+                    <tr>
+                        <td colspan="3" style="text-align: center;">Nenhuma nota cadastrada</td>
+                    </tr>
+                    <% } %>
                 </table>
 
             </section>
@@ -160,8 +167,7 @@
 
             // mostra a section clicada
             const target = this.getAttribute("data-target");
-            document.getElementById(target)
-                .classList.add("active-section");
+            document.getElementById(target).classList.add("active-section");
         });
     });
 </script>

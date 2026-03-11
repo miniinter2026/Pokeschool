@@ -1,25 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <title>Ação Inválida</title>
-  <link rel="stylesheet" href="../Styles/erro.css">
+  <link rel="stylesheet" href="/PokeSchool_war_exploded/Styles/erro.css">
 </head>
-
 <body>
 
 <button id="back-button" onclick="history.back()">← Voltar</button>
 
 <main id="error-container">
   <div id="left-side">
-    <img src="../assets/img/pikachu-triste.png" alt="Pikachu Triste">
+    <img src="/PokeSchool_war_exploded/assets/img/pikachu-triste.png" alt="Pikachu Triste">
   </div>
   <div id="right-side">
     <h1>Ação Inválida...</h1>
     <p>Tente novamente mais tarde</p>
+    <div class="error-actions">
+      <a href="/PokeSchool_war_exploded/adminDashboard" class="btn">Ir para Dashboard</a>
+      <a href="/PokeSchool_war_exploded/login" class="btn btn-sair">Sair</a>
+    </div>
   </div>
 </main>
-</body>
 
+</body>
 </html>

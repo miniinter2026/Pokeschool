@@ -85,8 +85,7 @@ public class Login extends HttpServlet {
                     session.setAttribute("alunoNome", alunoDAO.buscarPorRa(ra).getNomeCompleto());
                     session.setAttribute("aluno", alunoDAO.buscarPorRa(ra));
 
-                    // ✅ REDIRECIONAR PARA HOME DO ALUNO
-                    response.sendRedirect(request.getContextPath() + "/aluno/home-aluno.jsp");
+                    response.sendRedirect(request.getContextPath() + "/aluno/home");
                 } else {
                     System.out.println("❌ Login de aluno inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
@@ -103,12 +102,6 @@ public class Login extends HttpServlet {
                 try {
                     professor = professorDAO.login(usuario, senha);
                     System.out.println("🔵 Professor retornado: " + (professor != null ? "SIM ✅" : "NÃO ❌"));
-                    if (professor != null) {
-                        System.out.println("🔵 ID: " + professor.getId());
-                        System.out.println("🔵 Nome: " + professor.getNomeCompleto());
-                        System.out.println("🔵 Disciplina ID: " + professor.getIdDisciplina());
-                        System.out.println("🔵 Disciplina Nome: " + professor.getNomeDisciplina());
-                    }
                 } catch (Exception e) {
                     System.err.println("❌ Erro ao verificar login de professor: " + e.getMessage());
                     e.printStackTrace();
@@ -117,7 +110,6 @@ public class Login extends HttpServlet {
                 if (professor != null) {
                     System.out.println("✅ Login de professor válido!");
 
-                    // ✅ SALVAR NA SESSÃO
                     HttpSession session = request.getSession();
                     session.setAttribute("professorId", professor.getId());
                     session.setAttribute("professorNome", professor.getNomeCompleto());
@@ -125,7 +117,6 @@ public class Login extends HttpServlet {
                     session.setAttribute("professorNomeDisciplina", professor.getNomeDisciplina());
                     session.setAttribute("professor", professor);
 
-                    // ✅ REDIRECIONAR PARA DASHBOARD (CORRIGIDO)
                     response.sendRedirect(request.getContextPath() + "/professor/dashboard");
                 } else {
                     System.out.println("❌ Login de professor inválido");
@@ -138,21 +129,19 @@ public class Login extends HttpServlet {
                 AdministradorDAO administradorDAO = new AdministradorDAO();
                 System.out.println("🔵 Verificando login de administrador: " + usuario);
 
-                boolean loginValido = false;
-                try {
-                    loginValido = administradorDAO.verificaLoginAdministrador(usuario, senha);
-                } catch (Exception e) {
-                    System.err.println("❌ Erro ao verificar login de administrador: " + e.getMessage());
-                    e.printStackTrace();
-                }
+                Administrador admin = administradorDAO.login(usuario, senha);
 
-                if (loginValido) {
-                    System.out.println("✅ Login de administrador válido!");
+                if (admin != null) {
+                    System.out.println("✅ Login de administrador válido! ID: " + admin.getId());
+
                     HttpSession session = request.getSession();
                     session.setAttribute("adminUsuario", usuario);
+                    session.setAttribute("admin", admin);
+                    session.setAttribute("adminId", admin.getId());
+                    session.setAttribute("adminNome", admin.getNome());
 
-                    // ✅ REDIRECIONAR PARA AREA RESTRITA (CORRIGIDO)
-                    response.sendRedirect(request.getContextPath() + "/area-restrita/index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/adminDashboard");
+
                 } else {
                     System.out.println("❌ Login de administrador inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
@@ -196,19 +185,20 @@ public class Login extends HttpServlet {
         }
     }
 
-    // ✅ MÉTODO CORREGIDO - Agora reconhece ana.mat corretamente
     private String identificarTipo(String usuario) {
-        // ✅ ALUNO: Apenas números (5 ou 6 dígitos)
-        if (usuario != null && usuario.matches("^\\d{5,6}$")) {
+        if (usuario == null) return "INVALIDO";
+
+        // ✅ ADM: Primeiro verifica se contém "adm" (case insensitive)
+        if (usuario.toLowerCase().contains("adm")) {
+            return "ADM";
+        }
+        // ✅ ALUNO: Apenas números
+        else if (usuario.matches("^\\d+$")) {
             return "ALUNO";
         }
-        // ✅ PROFESSOR: Letras + ponto + letras (ex: ana.mat, joao.silva)
-        else if (usuario != null && usuario.matches("^[a-zA-Z]+\\.[a-zA-Z]+$")) {
+        // ✅ PROFESSOR: Formato com ponto
+        else if (usuario.matches("^[a-zA-Z]+\\.[a-zA-Z]+$")) {
             return "PROFESSOR";
-        }
-        // ✅ ADM: Letras + ponto + "adm" (ex: beatrizAdm.user)
-        else if (usuario != null && usuario.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9])(?=.*(?i)adm).+$")) {
-            return "ADM";
         }
         return "INVALIDO";
     }

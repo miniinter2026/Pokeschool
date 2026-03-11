@@ -80,7 +80,6 @@ public class AlunoDAO {
         return lista;
     }
 
-    // ✅ NOVO MÉTODO: Buscar por RA ou Nome
     public List<Aluno> buscarPorNomeOuRa(String termo) {
         List<Aluno> lista = new ArrayList<>();
         String sql = "SELECT * FROM aluno WHERE ra::text LIKE ? OR nome_completo LIKE ?";
@@ -123,25 +122,42 @@ public class AlunoDAO {
 
     public boolean atualizar(Aluno a) {
         boolean retorno = false;
-        String sql = "UPDATE aluno SET nome_completo=?, email=?, senha=?, sala=? WHERE ra=?";
 
-        try {
-            conn = banco.conectar();
-            PreparedStatement ps = conn.prepareStatement(sql);
-
-            ps.setString(1, a.getNomeCompleto());
-            ps.setString(2, a.getEmail());
-            ps.setString(3, a.getSenha());
-            ps.setInt(4, a.getIdSala());
-            ps.setInt(5, a.getRa());
-
-            retorno = ps.executeUpdate() == 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            banco.desconectar(conn);
-            return retorno;
+        // Se senha foi fornecida, atualiza com senha
+        if (a.getSenha() != null && !a.getSenha().isEmpty()) {
+            String sql = "UPDATE aluno SET nome_completo=?, email=?, senha=?, sala=? WHERE ra=?";
+            try {
+                conn = banco.conectar();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, a.getNomeCompleto());
+                ps.setString(2, a.getEmail());
+                ps.setString(3, a.getSenha());
+                ps.setInt(4, a.getIdSala());
+                ps.setInt(5, a.getRa());
+                retorno = ps.executeUpdate() == 1;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                banco.desconectar(conn);
+            }
+        } else {
+            // Sem senha - não altera a senha
+            String sql = "UPDATE aluno SET nome_completo=?, email=?, sala=? WHERE ra=?";
+            try {
+                conn = banco.conectar();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, a.getNomeCompleto());
+                ps.setString(2, a.getEmail());
+                ps.setInt(3, a.getIdSala());
+                ps.setInt(4, a.getRa());
+                retorno = ps.executeUpdate() == 1;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                banco.desconectar(conn);
+            }
         }
+        return retorno;
     }
 
     public boolean deletar(int ra) {

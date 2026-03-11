@@ -34,8 +34,8 @@ public class AdministradorDAO {
             sqle.printStackTrace();
         } finally {
             banco.desconectar(conn);
-            return retorno;
         }
+        return retorno;
     }
 
     public List<Administrador> listar() {
@@ -77,7 +77,6 @@ public class AdministradorDAO {
     }
 
     public boolean verificaLoginAdministrador(String nomeUsuario, String senha) {
-        boolean retorno = false;
         String sql = "SELECT * FROM administrador WHERE nome_usuario = ? AND senha = ?";
 
         try {
@@ -87,16 +86,14 @@ public class AdministradorDAO {
             ps.setString(2, senha);
 
             ResultSet rs = ps.executeQuery();
+            return rs.next();
 
-            if (rs.next()) {
-                retorno = true;
-            }
         } catch (Exception e) {
             System.out.println("!!SQLException ao chamar AdministradorDAO.verificaLoginAdmin()!!");
             e.printStackTrace();
+            return false;
         } finally {
             banco.desconectar(conn);
-            return retorno;
         }
     }
 
@@ -108,6 +105,33 @@ public class AdministradorDAO {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, nomeUsuario);
             ps.setString(2, senha);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                Administrador a = new Administrador();
+                a.setId(rs.getInt("id"));
+                a.setNome(rs.getString("nome"));
+                a.setNomeUsuario(rs.getString("nome_usuario"));
+                a.setSenha(rs.getString("senha"));
+                a.setEmail(rs.getString("email"));
+                return a;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            banco.desconectar(conn);
+        }
+        return null;
+    }
+
+    public Administrador buscarPorUsuario(String nomeUsuario) {
+        String sql = "SELECT * FROM administrador WHERE nome_usuario = ?";
+
+        try {
+            conn = banco.conectar();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, nomeUsuario);
 
             ResultSet rs = ps.executeQuery();
 

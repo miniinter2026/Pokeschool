@@ -238,3 +238,17 @@ input, select, textarea {
 .nav-btn.logout:hover {
     background-color: #330000;
 }
+
+.aluno-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #d80000;
+}
+.aluno-header h3 {
+    margin: 0;
+    color: #333;
+}

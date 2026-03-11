@@ -13,8 +13,37 @@
     <meta charset="UTF-8">
     <title>PokeSchool - Dashboard Professor</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/Styles/professorDashboard.css">
-    <!-- Ícones opcionais -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .aluno-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #d80000;
+        }
+        .aluno-header h3 {
+            margin: 0;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        .aluno-header .btn-add {
+            background-color: #d80000;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .aluno-header .btn-add:hover {
+            background-color: #b30000;
+        }
+        .obs-card {
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -44,7 +73,7 @@
             <a class="nav-btn active" data-target="dashboard">DASHBOARD</a>
             <a class="nav-btn" data-target="notas">NOTAS</a>
             <a class="nav-btn" data-target="observacoes">OBSERVAÇÕES</a>
-            <a class="nav-btn logout" href="<%= request.getContextPath() %>/logout">Sair</a>
+            <a class="nav-btn logout" href="<%= request.getContextPath() %>/logout">SAIR</a>
         </nav>
     </aside>
 
@@ -52,16 +81,14 @@
         <div class="top-wave"></div>
         <div class="container">
 
-            <!-- ========== DASHBOARD (SÓ VISUALIZAÇÃO, SEM AÇÕES) ========== -->
+            <!-- DASHBOARD -->
             <section id="dashboard" class="section active-section">
                 <h2>Dashboard</h2>
-
                 <div class="obs-card">
                     <p><strong>Bem-vindo(a), </strong><%= professor.getNomeCompleto() %></p>
                     <p><strong>Disciplina:</strong> <%= professor.getNomeDisciplina() %></p>
                 </div>
 
-                <!-- FILTRO RÁPIDO -->
                 <div class="filtro-container">
                     <input type="text" id="filtroDashboard" placeholder="Filtrar por nome ou RA..."
                            style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:5px;">
@@ -90,7 +117,7 @@
                 </table>
             </section>
 
-            <!-- ========== NOTAS ========== -->
+            <!-- NOTAS -->
             <section id="notas" class="section">
                 <h2>Gerenciamento de Notas</h2>
 
@@ -131,7 +158,6 @@
                             <td class="<%= classe %>"><%= situacao %></td>
                             <td>
                                 <button class="btn-edit" onclick="abrirEditar('<%= av.getIdBoletim() %>', '<%= av.getN1() %>', '<%= av.getN2() %>')">Editar</button>
-                                <button class="btn-danger" onclick="confirmarDelete('<%= av.getIdBoletim() %>')">Apagar</button>
                             </td>
                         </tr>
                         <%      }
@@ -149,7 +175,7 @@
                 </table>
             </section>
 
-            <!-- ========== OBSERVAÇÕES ========== -->
+            <!-- OBSERVAÇÕES -->
             <section id="observacoes" class="section">
                 <h2>Observações Acadêmicas</h2>
 
@@ -163,32 +189,38 @@
                         ObservacoesDAO obsDAO = new ObservacoesDAO();
                         for (Aluno a : listaAlunos) {
                             List<Observacoes> observacoes = obsDAO.listarPorAlunoERa(a.getRa(), disciplinaId);
-                            if (observacoes != null && !observacoes.isEmpty()) {
-                                for (Observacoes o : observacoes) { %>
+                    %>
+                    <div class="aluno-header">
+                        <h3><%= a.getNomeCompleto() %> (RA: <%= a.getRa() %>)</h3>
+                        <button class="btn-add" onclick="abrirModalObs('<%= a.getRa() %>')">Nova Observação</button>
+                    </div>
+
+                    <%
+                        if (observacoes != null && !observacoes.isEmpty()) {
+                            for (Observacoes o : observacoes) {
+                    %>
                     <div class="obs-card obs-item"
                          data-nome="<%= a.getNomeCompleto().toLowerCase() %>"
                          data-ra="<%= a.getRa() %>"
                          data-texto="<%= o.getDescricao().toLowerCase() %>">
-                        <p><strong><%= a.getNomeCompleto() %> (RA: <%= a.getRa() %>)</strong></p>
                         <p class="obs-descricao"><%= o.getDescricao() %></p>
                         <div class="obs-footer">
                             <span class="obs-date"><%= o.getData() %></span>
                             <div>
-                                <button class="btn-edit-small" onclick="editarObs('<%= o.getId() %>', '<%= o.getDescricao().replace("'", "\\'") %>', '<%= a.getRa() %>')">✏️ Editar</button>
-                                <button class="btn-danger-small" onclick="deleteObs('<%= o.getId() %>', '<%= a.getRa() %>')">🗑️ Excluir</button>
+                                <button class="btn-edit-small" onclick="editarObs('<%= o.getId() %>', '<%= o.getDescricao().replace("'", "\\'") %>', '<%= a.getRa() %>')">Editar</button>
+                                <button class="btn-danger-small" onclick="deleteObs('<%= o.getId() %>', '<%= a.getRa() %>')">Excluir</button>
                             </div>
                         </div>
                     </div>
-                    <%      }
-                            } else { %>
-                    <div class="obs-card obs-item" data-nome="<%= a.getNomeCompleto().toLowerCase() %>" data-ra="<%= a.getRa() %>">
-                        <p><strong><%= a.getNomeCompleto() %> (RA: <%= a.getRa() %>)</strong></p>
-                        <p style="text-align:center; color:#888;">Nenhuma observação</p>
-                        <div style="text-align:center;">
-                            <button class="btn-add" onclick="abrirModalObs('<%= a.getRa() %>')">+ Nova</button>
-                        </div>
+                    <%
+                        }
+                    } else {
+                    %>
+                    <div class="obs-card">
+                        <p style="text-align:center; color:#888;">Nenhuma observação para este aluno</p>
                     </div>
-                    <%      }
+                    <%
+                            }
                         }
                     } %>
                 </div>
@@ -197,7 +229,7 @@
     </main>
 </div>
 
-<!-- MODAIS (APENAS OS NECESSÁRIOS) -->
+<!-- MODAIS -->
 <div id="modal-add" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-add')">&times;</span>
@@ -219,7 +251,6 @@
     </div>
 </div>
 
-<!-- MODAL EDIT NOTA -->
 <div id="modal-edit" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-edit')">&times;</span>
@@ -240,7 +271,6 @@
     </div>
 </div>
 
-<!-- MODAL ADD OBS -->
 <div id="modal-add-obs" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-add-obs')">&times;</span>
@@ -254,7 +284,6 @@
     </div>
 </div>
 
-<!-- MODAL EDIT OBS -->
 <div id="modal-edit-obs" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-edit-obs')">&times;</span>
@@ -269,7 +298,6 @@
     </div>
 </div>
 
-<!-- MODAL DELETE OBS -->
 <div id="modal-delete-obs" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-delete-obs')">&times;</span>
@@ -284,7 +312,7 @@
     </div>
 </div>
 
-<!-- JAVASCRIPT (APENAS O ESSENCIAL) -->
+<!-- JAVASCRIPT -->
 <script>
     // Navegação por abas
     document.querySelectorAll(".nav-btn").forEach(btn => {
@@ -299,10 +327,8 @@
     // Modais
     function abrirModal(id) { document.getElementById(id).style.display = "block"; }
     function fecharModal(id) { document.getElementById(id).style.display = "none"; }
-
     window.onclick = e => { if (e.target.classList.contains("modal")) e.target.style.display = "none"; };
 
-    // Ações específicas
     function abrirModalNota(ra) { document.getElementById("modal-ra").value = ra; abrirModal("modal-add"); }
     function abrirModalObs(ra) { document.getElementById("modal-obs-ra").value = ra; abrirModal("modal-add-obs"); }
 
@@ -312,8 +338,6 @@
         document.getElementById("edit-n2").value = n2;
         abrirModal("modal-edit");
     }
-
-    function confirmarDelete(id) { if (confirm("Excluir nota?")) location.href = "<%= request.getContextPath() %>/professor/notas?acao=excluir&id=" + id; }
 
     function editarObs(id, desc, ra) {
         document.getElementById("edit-id-obs").value = id;
@@ -328,31 +352,53 @@
         abrirModal("modal-delete-obs");
     }
 
-    // FILTROS EM TEMPO REAL
+    // FILTROS
     document.getElementById("filtroDashboard")?.addEventListener("input", function() {
-        let termo = this.value.toLowerCase(), cont = 0;
+        let termo = this.value.toLowerCase();
         document.querySelectorAll("#dashboard-body .aluno-row").forEach(linha => {
-            if (linha.dataset.nome.includes(termo) || linha.dataset.ra.includes(termo)) {
-                linha.style.display = ""; cont++;
-            } else linha.style.display = "none";
+            let nome = (linha.dataset.nome || "").toLowerCase();
+            let ra = (linha.dataset.ra || "").toLowerCase();
+            linha.style.display = (nome.includes(termo) || ra.includes(termo)) ? "" : "none";
         });
     });
 
     document.getElementById("filtroNotas")?.addEventListener("input", function() {
-        let termo = this.value.toLowerCase(), cont = 0;
+        let termo = this.value.toLowerCase();
         document.querySelectorAll("#notas-body .nota-row").forEach(linha => {
-            if (linha.dataset.nome.includes(termo) || linha.dataset.ra.includes(termo)) {
-                linha.style.display = ""; cont++;
-            } else linha.style.display = "none";
+            let nome = (linha.dataset.nome || "").toLowerCase();
+            let ra = (linha.dataset.ra || "").toLowerCase();
+            linha.style.display = (nome.includes(termo) || ra.includes(termo)) ? "" : "none";
         });
     });
 
+    // FILTRO DE OBSERVAÇÕES CORRIGIDO
     document.getElementById("filtroObservacoes")?.addEventListener("input", function() {
-        let termo = this.value.toLowerCase(), cont = 0;
+        let termo = this.value.toLowerCase().trim();
+
         document.querySelectorAll(".obs-item").forEach(card => {
-            if (card.dataset.nome.includes(termo) || card.dataset.ra.includes(termo) || card.dataset.texto?.includes(termo)) {
-                card.style.display = ""; cont++;
-            } else card.style.display = "none";
+            let nome = (card.getAttribute("data-nome") || "").toLowerCase();
+            let ra = (card.getAttribute("data-ra") || "").toLowerCase();
+            let texto = (card.getAttribute("data-texto") || "").toLowerCase();
+
+            if (termo === "") {
+                card.style.display = "";
+            } else if (nome.includes(termo) || ra.includes(termo) || texto.includes(termo)) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        // Também esconde cabeçalhos de alunos sem observações visíveis
+        document.querySelectorAll(".aluno-header").forEach(header => {
+            let alunoRa = header.querySelector("h3").textContent.match(/RA: (\d+)/)?.[1];
+            if (alunoRa) {
+                let temObsVisivel = false;
+                document.querySelectorAll(`.obs-item[data-ra="${alunoRa}"]`).forEach(card => {
+                    if (card.style.display !== "none") temObsVisivel = true;
+                });
+                header.style.display = temObsVisivel ? "flex" : "none";
+            }
         });
     });
 </script>

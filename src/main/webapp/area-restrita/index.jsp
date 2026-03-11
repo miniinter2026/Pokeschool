@@ -62,13 +62,14 @@
 <div class="layout">
     <div class="sidebar">
         <div class="profile">
-            <img src="../assets/img/arceus.jpg" alt="Admin">
+            <img src="<%= request.getContextPath() %>/assets/img/arceus.jpg" alt="Admin">
             <h3>ADMIN</h3>
         </div>
         <nav>
-            <a href="adminDashboard" class="nav-btn active">Alunos</a>
-            <a href="adminDashboard" class="nav-btn" onclick="mostrarSecao('professores', this)">Professores</a>
-            <a href="../index.jsp">Sair</a>
+            <!-- MUDANÇA 1: Removido href e adicionado onclick para evitar recarregar -->
+            <a href="javascript:void(0)" class="nav-btn active" onclick="mostrarSecao('alunos', this)">ALUNOS</a>
+            <a href="javascript:void(0)" class="nav-btn" onclick="mostrarSecao('professores', this)">PROFESSORES</a>
+            <a class="nav-btn logout" href="<%= request.getContextPath() %>/logout">SAIR</a>
         </nav>
     </div>
 
@@ -79,7 +80,7 @@
             <!-- SEÇÃO ALUNOS -->
             <div id="secao-alunos" class="section active-section">
                 <h2>Gerenciar Alunos</h2>
-                <button class="btn btn-add" onclick="abrirModalAddAluno()">+ Novo Aluno</button>
+                <button class="btn btn-add" onclick="abrirModalAddAluno()">Novo Aluno</button>
                 <input type="text" id="buscaAluno" placeholder="Buscar por nome ou RA..." onkeyup="buscarAluno()">
 
                 <table id="tabelaAlunos">
@@ -197,7 +198,7 @@
 <div id="modal-add-aluno" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-add-aluno')">&times;</span>
-        <h3>➕ Novo Aluno</h3>
+        <h3>Novo Aluno</h3>
         <form action="adminAlunos" method="post">
             <input type="hidden" name="acao" value="inserir">
             <div class="form-group">
@@ -235,7 +236,7 @@
 <div id="modal-edit-aluno" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-edit-aluno')">&times;</span>
-        <h3>✏️ Editar Aluno</h3>
+        <h3>Editar Aluno</h3>
         <form action="adminAlunos" method="post">
             <input type="hidden" name="acao" value="editar">
             <div class="form-group">
@@ -251,8 +252,8 @@
                 <input type="email" name="email" id="edit-email" required>
             </div>
             <div class="form-group">
-                <label>Senha:</label>
-                <input type="password" name="senha" id="edit-senha">
+                <label>Senha (deixe em branco para manter):</label>
+                <input type="password" name="senha" id="edit-senha" placeholder="********">
             </div>
             <div class="form-group">
                 <label>Sala:</label>
@@ -272,7 +273,7 @@
 <div id="modal-delete-aluno" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-delete-aluno')">&times;</span>
-        <h3>🗑️ Confirmar Exclusão</h3>
+        <h3>Confirmar Exclusão</h3>
         <p>Tem certeza que deseja excluir este aluno?</p>
         <form action="adminAlunos" method="post">
             <input type="hidden" name="acao" value="excluir">
@@ -287,7 +288,7 @@
 <div id="modal-add-professor" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-add-professor')">&times;</span>
-        <h3>➕ Novo Professor</h3>
+        <h3>Novo Professor</h3>
         <form action="adminProfessores" method="post">
             <input type="hidden" name="acao" value="inserir">
             <div class="form-group">
@@ -325,12 +326,12 @@
 <div id="modal-edit-professor" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-edit-professor')">&times;</span>
-        <h3>✏️ Editar Professor</h3>
+        <h3>Editar Professor</h3>
         <form action="adminProfessores" method="post">
             <input type="hidden" name="acao" value="editar">
             <div class="form-group">
                 <label>ID:</label>
-                <input type="number" name="id" id="edit-id" required>
+                <input type="number" name="id" id="edit-id" readonly style="background-color:#f0f0f0;">
             </div>
             <div class="form-group">
                 <label>Nome Completo:</label>
@@ -345,8 +346,8 @@
                 <input type="email" name="email" id="edit-email" required>
             </div>
             <div class="form-group">
-                <label>Senha:</label>
-                <input type="password" name="senha" id="edit-senha">
+                <label>Senha (deixe em branco para manter):</label>
+                <input type="password" name="senha" id="edit-senha" placeholder="********">
             </div>
             <div class="form-group">
                 <label>Disciplina:</label>
@@ -366,7 +367,7 @@
 <div id="modal-delete-professor" class="modal">
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-delete-professor')">&times;</span>
-        <h3>🗑️ Confirmar Exclusão</h3>
+        <h3>Confirmar Exclusão</h3>
         <p>Tem certeza que deseja excluir este professor?</p>
         <form action="adminProfessores" method="post">
             <input type="hidden" name="acao" value="excluir">
@@ -378,11 +379,42 @@
 </div>
 
 <script>
+    // MUDANÇA 2: Função melhorada para mostrar seções sem recarregar
     function mostrarSecao(secao, element) {
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        // Prevenir comportamento padrão se for evento
+        if (event) event.preventDefault();
+
+        // Remover active de todos os botões
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Adicionar active no botão clicado
         element.classList.add('active');
-        document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-section'));
+
+        // Esconder todas as seções
+        document.querySelectorAll('.section').forEach(sec => {
+            sec.classList.remove('active-section');
+        });
+
+        // Mostrar a seção selecionada
         document.getElementById('secao-' + secao).classList.add('active-section');
+
+        // Opcional: atualizar a URL sem recarregar
+        history.pushState({}, '', '#' + secao);
+    }
+
+    // MUDANÇA 3: Inicializar baseado na URL ou mostrar alunos por padrão
+    window.onload = function() {
+        // Verificar se há hash na URL
+        const hash = window.location.hash.substring(1);
+        if (hash === 'professores') {
+            const professorBtn = document.querySelector('[onclick*="professores"]');
+            if (professorBtn) mostrarSecao('professores', professorBtn);
+        } else {
+            const alunoBtn = document.querySelector('[onclick*="alunos"]');
+            if (alunoBtn) mostrarSecao('alunos', alunoBtn);
+        }
     }
 
     function buscarAluno() {
@@ -427,6 +459,7 @@
         document.getElementById('edit-nome').value = nome;
         document.getElementById('edit-email').value = email;
         document.getElementById('edit-sala').value = sala;
+        document.getElementById('edit-senha').value = '';
         document.getElementById('modal-edit-aluno').style.display = 'block';
     }
 
@@ -460,6 +493,7 @@
         document.getElementById('edit-usuario').value = usuario;
         document.getElementById('edit-email').value = email;
         document.getElementById('edit-disciplina').value = disciplina;
+        document.getElementById('edit-senha').value = '';
         document.getElementById('modal-edit-professor').style.display = 'block';
     }
 
@@ -472,6 +506,7 @@
         document.getElementById('modal-delete-professor').style.display = 'block';
     }
 
+    // Fechar modal ao clicar fora
     window.onclick = function(event) {
         if (event.target.className === 'modal') {
             event.target.style.display = 'none';

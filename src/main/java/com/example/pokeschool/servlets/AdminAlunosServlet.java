@@ -16,51 +16,88 @@ public class AdminAlunosServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        AlunoDAO dao = new AlunoDAO();
-        List<Aluno> lista = dao.listar();
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("admin") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
 
-        request.setAttribute("listaAlunos", lista);
-
-        request.getRequestDispatcher("/home-aluno.jsp")
-                .forward(request, response);
+        try {
+            AlunoDAO dao = new AlunoDAO();
+            List<Aluno> lista = dao.listar();
+            request.setAttribute("listaAlunos", lista);
+            request.getRequestDispatcher("/adminDashboard").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/html/erro.html");
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String acao = request.getParameter("acao");
-        String raStr = request.getParameter("ra");
-        String nome = request.getParameter("nome");
-        String email = request.getParameter("email");
-        String senha = request.getParameter("senha");
-        String salaStr = request.getParameter("sala");
-
-        AlunoDAO dao = new AlunoDAO();
-
-        if ("excluir".equals(acao)) {
-            if (raStr != null && !raStr.isEmpty()) {
-                dao.deletar(Integer.parseInt(raStr));
-            }
-            response.sendRedirect("adminAlunos");
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("admin") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        Aluno a = new Aluno();
-        a.setRa(Integer.parseInt(raStr));
-        a.setNomeCompleto(nome);
-        a.setEmail(email);
-        a.setIdSala(Integer.parseInt(salaStr));  // CORRIGIDO: setSala → setIdSala
+        String acao = request.getParameter("acao");
+        System.out.println("🔵 AdminAlunos - Ação: " + acao);
 
-        if ("inserir".equals(acao)) {
-            a.setSenha(senha);
-            dao.inserir(a);
-        } else {
-            if (senha != null && !senha.isEmpty()) {
+        try {
+            AlunoDAO dao = new AlunoDAO();
+
+            if ("inserir".equals(acao)) {
+                int ra = Integer.parseInt(request.getParameter("ra"));
+                String nome = request.getParameter("nome");
+                String email = request.getParameter("email");
+                String senha = request.getParameter("senha");
+                int sala = Integer.parseInt(request.getParameter("sala"));
+
+                Aluno a = new Aluno();
+                a.setRa(ra);
+                a.setNomeCompleto(nome);
+                a.setEmail(email);
                 a.setSenha(senha);
-            }
-            dao.atualizar(a);
-        }
+                a.setIdSala(sala);
 
-        response.sendRedirect("adminAlunos");
+                dao.inserir(a);
+                System.out.println("✅ Aluno inserido RA: " + ra);
+            }
+            else if ("editar".equals(acao)) {
+                int ra = Integer.parseInt(request.getParameter("ra"));
+                String nome = request.getParameter("nome");
+                String email = request.getParameter("email");
+                String senha = request.getParameter("senha");
+                int sala = Integer.parseInt(request.getParameter("sala"));
+
+                Aluno a = new Aluno();
+                a.setRa(ra);
+                a.setNomeCompleto(nome);
+                a.setEmail(email);
+                a.setIdSala(sala);
+
+                // Só atualiza senha se foi preenchida
+                if (senha != null && !senha.trim().isEmpty()) {
+                    a.setSenha(senha);
+                }
+
+                boolean atualizou = dao.atualizar(a);
+                System.out.println("✅ Aluno atualizado RA " + ra + ": " + (atualizou ? "SIM" : "NÃO"));
+            }
+            else if ("excluir".equals(acao)) {
+                int ra = Integer.parseInt(request.getParameter("ra"));
+                dao.deletar(ra);
+                System.out.println("✅ Aluno excluído RA: " + ra);
+            }
+
+            response.sendRedirect(request.getContextPath() + "/adminDashboard");
+
+        } catch (Exception e) {
+            System.err.println("❌ Erro no AdminAlunosServlet: " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/html/erro.html");
+        }
     }
 }
