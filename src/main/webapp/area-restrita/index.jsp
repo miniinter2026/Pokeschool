@@ -5,57 +5,6 @@
     <meta charset="UTF-8">
     <title>PokeSchool - Admin</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/admDashboard.css">
-    <style>
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.7);
-        }
-        .modal-content {
-            background-color: #f5f5f5;
-            margin: 10% auto;
-            padding: 30px;
-            border: 1px solid #888;
-            width: 60%;
-            max-width: 500px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover { color: black; }
-        .btn {
-            padding: 8px 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-right: 5px;
-        }
-        .btn-primary { background-color: #d80000; color: white; }
-        .btn-edit { background-color: #2196F3; color: white; }
-        .btn-danger { background-color: #f44336; color: white; }
-        .btn-add { background-color: #d80000; color: white; padding: 10px 20px; font-size: 16px; }
-        .actions { display: flex; gap: 5px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-    </style>
 </head>
 <body>
 
@@ -79,8 +28,10 @@
 
             <!-- SEÇÃO ALUNOS -->
             <div id="secao-alunos" class="section active-section">
-                <h2>Gerenciar Alunos</h2>
-                <button class="btn btn-add" onclick="abrirModalAddAluno()">Novo Aluno</button>
+                <div class="titulo-add">
+                    <h2>Gerenciar Alunos</h2>
+                    <button class="btn-add" onclick="abrirModalAddAluno()">Novo Aluno</button>
+                </div>
                 <input type="text" id="buscaAluno" placeholder="Buscar por nome ou RA..." onkeyup="buscarAluno()">
 
                 <table id="tabelaAlunos">
@@ -134,8 +85,10 @@
 
             <!-- SEÇÃO PROFESSORES -->
             <div id="secao-professores" class="section">
-                <h2>Gerenciar Professores</h2>
-                <button class="btn btn-add" onclick="abrirModalAddProfessor()">+ Novo Professor</button>
+                <div class="titulo-add">
+                    <h2>Gerenciar Professores</h2>
+                    <button class="btn-add" onclick="abrirModalAddProfessor()">Novo Professor</button>
+                </div>
                 <input type="text" id="buscaProfessor" placeholder="Buscar por nome..." onkeyup="buscarProfessor()">
 
                 <table id="tabelaProfessores">
@@ -221,11 +174,11 @@
                 <label>Sala:</label>
                 <select name="sala" required>
                     <option value="">Selecione...</option>
-                    <option value="1">1K</option>
-                    <option value="2">2J</option>
-                    <option value="3">3H</option>
-                    <option value="4">4S</option>
-                    <option value="5">5U</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Salvar</button>
@@ -274,7 +227,9 @@
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-delete-aluno')">&times;</span>
         <h3>Confirmar Exclusão</h3>
-        <p>Tem certeza que deseja excluir este aluno?</p>
+        <div class="msg-confirmar">
+            <p>Tem certeza que deseja excluir este aluno?</p>
+        </div>
         <form action="adminAlunos" method="post">
             <input type="hidden" name="acao" value="excluir">
             <input type="hidden" name="ra" id="delete-ra">
