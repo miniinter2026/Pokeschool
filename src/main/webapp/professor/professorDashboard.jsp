@@ -40,9 +40,6 @@
         .aluno-header .btn-add:hover {
             background-color: #b30000;
         }
-        .obs-card {
-            margin-left: 20px;
-        }
     </style>
 </head>
 <body>
@@ -66,7 +63,7 @@
 
     <aside class="sidebar">
         <div class="profile">
-            <img src="<%= request.getContextPath() %>/assets/img/ProfesorOak.jpg" alt="Foto">
+            <img src="<%= request.getContextPath() %>/assets/img/team-valor.png" alt="Foto">
             <h3><%= professor.getNomeCompleto() %></h3>
         </div>
         <nav>
@@ -89,12 +86,12 @@
                     <p><strong>Disciplina:</strong> <%= professor.getNomeDisciplina() %></p>
                 </div>
 
+                <h3>Alunos Matriculados</h3>
+
                 <div class="filtro-container">
                     <input type="text" id="filtroDashboard" placeholder="Filtrar por nome ou RA..."
                            style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:5px;">
                 </div>
-
-                <h3>Alunos Matriculados</h3>
                 <table>
                     <thead>
                         <tr>
@@ -146,7 +143,7 @@
                                 if (notas != null && !notas.isEmpty()) {
                                     for (Avaliacao av : notas) {
                                         double media = (av.getN1() + av.getN2()) / 2;
-                                        String situacao = media >= 7 ? "Aprovado" : "Reprovado";
+                                        String situacao = media >= 7 ? "APROVADO" : "REPROVADO";
                                         String classe = media >= 7 ? "aprovado" : "reprovado";
                         %>
                         <tr class="nota-row" data-nome="<%= a.getNomeCompleto().toLowerCase() %>" data-ra="<%= a.getRa() %>">
@@ -154,10 +151,10 @@
                             <td><%= a.getNomeCompleto() %></td>
                             <td><%= av.getN1() %></td>
                             <td><%= av.getN2() %></td>
-                            <td class="<%= classe %>"><%= String.format("%.1f", media) %></td>
+                            <td><%= String.format("%.1f", media) %></td>
                             <td class="<%= classe %>"><%= situacao %></td>
                             <td>
-                                <button class="btn-edit" onclick="abrirEditar('<%= av.getIdBoletim() %>', '<%= av.getN1() %>', '<%= av.getN2() %>')">Editar</button>
+                                <button class="btn-edit-small" onclick="abrirEditar('<%= av.getIdBoletim() %>', '<%= av.getN1() %>', '<%= av.getN2() %>')">Editar</button>
                             </td>
                         </tr>
                         <%      }
@@ -166,7 +163,7 @@
                             <td><%= a.getRa() %></td>
                             <td><%= a.getNomeCompleto() %></td>
                             <td colspan="4" style="color:#888;">Sem notas</td>
-                            <td><button class="btn-add" onclick="abrirModalNota('<%= a.getRa() %>')">+ Adicionar</button></td>
+                            <td><button class="btn-add" onclick="abrirModalNota('<%= a.getRa() %>')">Lançar Notas</button></td>
                         </tr>
                         <%      }
                             }
@@ -185,44 +182,49 @@
                 </div>
 
                 <div class="obs-container" id="observacoes-container">
-                    <% if (listaAlunos != null) {
-                        ObservacoesDAO obsDAO = new ObservacoesDAO();
-                        for (Aluno a : listaAlunos) {
-                            List<Observacoes> observacoes = obsDAO.listarPorAlunoERa(a.getRa(), disciplinaId);
-                    %>
-                    <div class="aluno-header">
-                        <h3><%= a.getNomeCompleto() %> (RA: <%= a.getRa() %>)</h3>
-                        <button class="btn-add" onclick="abrirModalObs('<%= a.getRa() %>')">Nova Observação</button>
-                    </div>
-
                     <%
-                        if (observacoes != null && !observacoes.isEmpty()) {
-                            for (Observacoes o : observacoes) {
+                        if (listaAlunos != null) {
+                            ObservacoesDAO obsDAO = new ObservacoesDAO();
+                            for (Aluno a : listaAlunos) {
+                                List<Observacoes> observacoes = obsDAO.listarPorAlunoERa(a.getRa(), disciplinaId);
+
+                                // Criamos uma div pai para agrupar o header + observações de cada aluno
+                                // Isso facilita o filtro via JavaScript
                     %>
-                    <div class="obs-card obs-item"
-                         data-nome="<%= a.getNomeCompleto().toLowerCase() %>"
-                         data-ra="<%= a.getRa() %>"
-                         data-texto="<%= o.getDescricao().toLowerCase() %>">
-                        <p class="obs-descricao"><%= o.getDescricao() %></p>
-                        <div class="obs-footer">
-                            <span class="obs-date"><%= o.getData() %></span>
-                            <div>
-                                <button class="btn-edit-small" onclick="editarObs('<%= o.getId() %>', '<%= o.getDescricao().replace("'", "\\'") %>', '<%= a.getRa() %>')">Editar</button>
-                                <button class="btn-danger-small" onclick="deleteObs('<%= o.getId() %>', '<%= a.getRa() %>')">Excluir</button>
+                    <div class="aluno-group" data-ra="<%= a.getRa() %>" data-nome="<%= a.getNomeCompleto().toLowerCase() %>">
+                        <div class="aluno-header">
+                            <h3><%= a.getNomeCompleto() %> (RA: <%= a.getRa() %>)</h3>
+                            <button class="btn-add" onclick="abrirModalObs('<%= a.getRa() %>')">Nova Observação</button>
+                        </div>
+
+                        <%
+                            if (observacoes != null && !observacoes.isEmpty()) {
+                                for (Observacoes o : observacoes) {
+                        %>
+                        <div class="obs-card obs-item" data-texto="<%= o.getDescricao().toLowerCase() %>">
+                            <p class="obs-descricao"><%= o.getDescricao() %></p>
+                            <div class="obs-footer">
+                                <span class="obs-date"><%= o.getData() %></span>
+                                <div>
+                                    <button class="btn-edit-small" onclick="editarObs('<%= o.getId() %>', '<%= o.getDescricao().replace("'", "\\'") %>', '<%= a.getRa() %>')">Editar</button>
+                                    <button class="btn-danger-small" onclick="deleteObs('<%= o.getId() %>', '<%= a.getRa() %>')">Excluir</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <%
-                        }
-                    } else {
-                    %>
-                    <div class="obs-card">
-                        <p style="text-align:center; color:#888;">Nenhuma observação para este aluno</p>
-                    </div>
-                    <%
+                        <%
                             }
+                        } else {
+                        %>
+                        <div class="obs-card no-obs-message">
+                            <p style="text-align:center; color:#888;">Nenhuma observação para este aluno</p>
+                        </div>
+                        <%
+                            }
+                        %>
+                    </div> <%
                         }
-                    } %>
+                    }
+                %>
                 </div>
             </section>
         </div>
@@ -232,8 +234,10 @@
 <!-- MODAIS -->
 <div id="modal-add" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="fecharModal('modal-add')">&times;</span>
-        <h3>Nova Nota</h3>
+        <div class="fechar">
+            <span class="close" onclick="fecharModal('modal-add')">&times;</span>
+        </div>
+        <h3>Novas Notas</h3>
         <form action="<%= request.getContextPath() %>/professor/notas" method="post">
             <input type="hidden" name="acao" value="inserir">
             <input type="hidden" name="ra" id="modal-ra">
@@ -253,8 +257,10 @@
 
 <div id="modal-edit" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="fecharModal('modal-edit')">&times;</span>
-        <h3>Editar Nota</h3>
+        <div class="fechar">
+            <span class="close" onclick="fecharModal('modal-edit')">&times;</span>
+        </div>
+        <h3>Editar Notas</h3>
         <form action="<%= request.getContextPath() %>/professor/notas" method="post">
             <input type="hidden" name="acao" value="editar">
             <input type="hidden" name="idBoletim" id="edit-id">
@@ -273,7 +279,9 @@
 
 <div id="modal-add-obs" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="fecharModal('modal-add-obs')">&times;</span>
+        <div class="fechar">
+            <span class="close" onclick="fecharModal('modal-add-obs')">&times;</span>
+        </div>
         <h3>Nova Observação</h3>
         <form action="<%= request.getContextPath() %>/professor/observacoes" method="post">
             <input type="hidden" name="acao" value="inserir">
@@ -286,7 +294,9 @@
 
 <div id="modal-edit-obs" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="fecharModal('modal-edit-obs')">&times;</span>
+        <div class="fechar">
+            <span class="close" onclick="fecharModal('modal-edit-obs')">&times;</span>
+        </div>
         <h3>Editar Observação</h3>
         <form action="<%= request.getContextPath() %>/professor/observacoes" method="post">
             <input type="hidden" name="acao" value="editar">
@@ -300,9 +310,11 @@
 
 <div id="modal-delete-obs" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="fecharModal('modal-delete-obs')">&times;</span>
+        <div class="fechar">
+            <span class="close" onclick="fecharModal('modal-delete-obs')">&times;</span>
+        </div>
         <h3>Confirmar Exclusão</h3>
-        <form action="<%= request.getContextPath() %>/professor/observacoes" method="post">
+        <form class="opcoes" action="<%= request.getContextPath() %>/professor/observacoes" method="post">
             <input type="hidden" name="acao" value="excluir">
             <input type="hidden" name="id" id="delete-id-obs">
             <input type="hidden" name="ra" id="delete-obs-ra">
@@ -371,33 +383,23 @@
         });
     });
 
-    // FILTRO DE OBSERVAÇÕES CORRIGIDO
     document.getElementById("filtroObservacoes")?.addEventListener("input", function() {
         let termo = this.value.toLowerCase().trim();
 
-        document.querySelectorAll(".obs-item").forEach(card => {
-            let nome = (card.getAttribute("data-nome") || "").toLowerCase();
-            let ra = (card.getAttribute("data-ra") || "").toLowerCase();
-            let texto = (card.getAttribute("data-texto") || "").toLowerCase();
+        document.querySelectorAll(".aluno-group").forEach(grupo => {
+            let nome = grupo.getAttribute("data-nome") || "";
+            let ra = grupo.getAttribute("data-ra") || "";
 
-            if (termo === "") {
-                card.style.display = "";
-            } else if (nome.includes(termo) || ra.includes(termo) || texto.includes(termo)) {
-                card.style.display = "";
+            // Se o termo estiver vazio ou se o nome/RA coincidir
+            if (termo === "" || nome.includes(termo) || ra.includes(termo)) {
+                grupo.style.display = "block";
+
+                // Opcional: Se quiser filtrar o TEXTO da observação também:
+                if(termo !== "" && !nome.includes(termo) && !ra.includes(termo)) {
+                    // Lógica extra caso queira esconder cards específicos dentro do aluno
+                }
             } else {
-                card.style.display = "none";
-            }
-        });
-
-        // Também esconde cabeçalhos de alunos sem observações visíveis
-        document.querySelectorAll(".aluno-header").forEach(header => {
-            let alunoRa = header.querySelector("h3").textContent.match(/RA: (\d+)/)?.[1];
-            if (alunoRa) {
-                let temObsVisivel = false;
-                document.querySelectorAll(`.obs-item[data-ra="${alunoRa}"]`).forEach(card => {
-                    if (card.style.display !== "none") temObsVisivel = true;
-                });
-                header.style.display = temObsVisivel ? "flex" : "none";
+                grupo.style.display = "none";
             }
         });
     });

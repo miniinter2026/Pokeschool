@@ -5,27 +5,48 @@
     font-family: "Montserrat", sans-serif;
 }
 
-body {
-    height: 100vh;
-    background-color: #e6e6e6;
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 .layout {
     display: flex;
     height: 100vh;
+    width: 100vw;
 }
 
-/* SIDEBAR */
+/* SIDEBAR (Visual Aluno) */
 .sidebar {
     width: 250px;
     background-color: #000;
     color: white;
-    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 30px;
+    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+}
+
+.profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: white;
+    padding: 5px;
+    margin-bottom: 15px;
 }
 
 .sidebar nav {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    margin-top: 30px;
 }
 
 .sidebar nav a {
@@ -34,11 +55,7 @@ body {
     color: #bfbfbf;
     font-weight: 700;
     transition: 0.3s;
-}
-
-.sidebar nav a:hover {
-    background-color: #1a1a1a;
-    color: white;
+    cursor: pointer;
 }
 
 .sidebar nav a.active {
@@ -53,6 +70,7 @@ body {
     flex: 1;
     position: relative;
     padding: 50px;
+    margin-left: 250px;
 }
 
 .top-wave {
@@ -123,4 +141,103 @@ input {
     border-radius: 50%;
     background: white;
     padding: 5px;
+}
+
+/* Botões menores para dentro do card */
+.btn-edit-small, .btn-danger-small {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.btn-edit-small { background: #e3f2fd; color: #1976d2; }
+.btn-danger-small { background: #ffebee; color: #c62828; }
+
+.btn-edit-small:hover { background: #bbdefb; }
+.btn-danger-small:hover { background: #ffcdd2; }
+
+.titulo-add {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-add { background-color: #d80000;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover { opacity: 0.8; }
+
+/* MODAIS */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+.modal-content {
+    background-color: #f5f5f5;
+    margin: auto;
+    margin-top: 100px;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 60%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close:hover { color: black; }
+.btn {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+.btn-primary { background-color: #d80000; color: white; }
+.btn-edit { background-color: #2196F3; color: white; }
+.btn-danger { background-color: #f44336; color: white; }
+.btn-add { background-color: #d80000; color: white; padding: 10px 20px; font-size: 16px; }
+.btn-add:hover { background-color: #d32f20; }
+.actions { display: flex; gap: 5px; justify-content: center }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; margin-top: 20px; }
+input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.nav-btn.logout {
+    color: #ff4d4d !important;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.nav-btn.logout:hover {
+    background-color: #330000;
+}
+
+.msg-confirmar {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
