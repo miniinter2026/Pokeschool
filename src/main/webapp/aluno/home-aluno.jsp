@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PokeSchool | Área do Aluno</title>
+    <title>PokeSchool | Aluno</title>
     <link rel="stylesheet" href="../Styles/dashboard.css">
 </head>
 <body>

@@ -11,7 +11,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>PokeSchool - Dashboard Professor</title>
+    <title>PokeSchool | Professor</title>
     <link rel="stylesheet" href="<%= request.getContextPath() %>/Styles/professorDashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -67,7 +67,7 @@
             <h3><%= professor.getNomeCompleto() %></h3>
         </div>
         <nav>
-            <a class="nav-btn active" data-target="dashboard">DASHBOARD</a>
+            <a class="nav-btn active" data-target="dashboard">ALUNOS</a>
             <a class="nav-btn" data-target="notas">NOTAS</a>
             <a class="nav-btn" data-target="observacoes">OBSERVAÇÕES</a>
             <a class="nav-btn logout" href="<%= request.getContextPath() %>/logout">SAIR</a>
@@ -80,7 +80,7 @@
 
             <!-- DASHBOARD -->
             <section id="dashboard" class="section active-section">
-                <h2>Dashboard</h2>
+                <h2>Alunos</h2>
                 <div class="obs-card">
                     <p><strong>Bem-vindo(a), </strong><%= professor.getNomeCompleto() %></p>
                     <p><strong>Disciplina:</strong> <%= professor.getNomeDisciplina() %></p>

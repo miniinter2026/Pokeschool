@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>PokeSchool - Admin</title>
+    <title>PokeSchool | Admin</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/admDashboard.css">
 </head>
 <body>
