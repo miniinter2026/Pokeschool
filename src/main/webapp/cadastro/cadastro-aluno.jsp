@@ -22,7 +22,7 @@
         <input type="password" name="senha" class="senha" placeholder="Senha" required>
         <input type="number" name="idSala" placeholder="Sala" required>
         <button type="submit">Cadastrar</button>
-        <p>Já tem conta? <a href="../index.jsp">Faça Login</a></p>
+        <p>Já tem conta? <a href="${pageContext.request.contextPath}/index.jsp">Faça Login</a></p>
     </form>
 </section>
 <!-- Details -->
