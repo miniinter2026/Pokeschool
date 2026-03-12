@@ -5,8 +5,7 @@
 
 @font-face {
     font-family: "Montserrat";
-    src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
-    format("truetype");
+    src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf") format("truetype");
     font-weight: 100 900;
     font-style: normal;
     font-display: swap;
@@ -14,11 +13,16 @@
 
 @font-face {
     font-family: "Montserrat";
-    src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
-    format("truetype");
+    src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf") format("truetype");
     font-weight: 100 900;
     font-style: italic;
     font-display: swap;
+}
+
+:root {
+    --font-title: "metropolis", sans-serif;
+    --font-text: "montserrat", sans-serif;
+    --principal-text-color: #fff;
 }
 
 body {
@@ -27,30 +31,35 @@ body {
     align-items: center;
     justify-content: center;
 
-    background-color: black;
-    color: white;
-    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff0000 0%, #000000 50%, #ffffff 100%);
+}
+
+h2 {
+    font-family: var(--font-title);
+    font-size: 32px;
+    text-align: center;
+    color: var(--principal-text-color);
+    margin-top: 20px;
 }
 
 .container {
-    position: absolute;
-    width: 415px;
-    height: 200px;
-    background-color: #77508d;
-    color: black;
-    top: 35%;
-    border-radius: 15px;
-}
-
-form, h2{
-    align-self: center;
-    justify-self: center;
-}
-
-form{
     display: flex;
     flex-direction: column;
-    width: 90%;
+    align-items: center;
+    width: 416px;
+    margin-top: 50px;
+    height: 280px;
+    background-color: transparent;
+}
+
+form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10%;
 }
 
 input {
@@ -59,33 +68,41 @@ input {
     margin-bottom: 12px;
     background-color: rgba(255, 255, 255, 0.288);
     border: 1.25px solid white;
+    color: var(--principal-text-color);
 }
+
 input::placeholder {
-    color: white;
+    color: var(--principal-text-color);
 }
+
 button {
     width: 300px;
-    height: 30px;
+    height: 40px;
     align-self: center;
     border: none;
     border-radius: 6px;
     background-color: #d80000;
-    color: white;
-    font-family: "Montserrat", sans-serif;
+    color: var(--principal-text-color);
+    font-family: var(--font-text);
     font-size: 20px;
     transition: 0.2s ease-out;
+    cursor: pointer;
+    margin-top: 10px;
 }
+
 button:hover {
     background-color: #b20000;
     transition: 0.2s ease-in;
 }
-.mew1{
+
+.mew1 {
     position: absolute;
     width: 200px;
     left: 450px;
     top: 48%;
 }
-.mew2{
+
+.mew2 {
     position: absolute;
     width: 270px;
     right: 425px;
