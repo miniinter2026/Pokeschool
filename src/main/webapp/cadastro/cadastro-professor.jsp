@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadastro Professor</title>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/img/LogoPokeSchool.png" type="image/x-icon">
 </head>
 <body>
 

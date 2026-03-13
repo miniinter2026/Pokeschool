@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PokeSchool | Login</title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/sign-in.css" />
+  <link rel="shortcut icon" href="assets/img/LogoPokeSchool.png" type="image/x-icon">
 </head>
 <body>
 <!-- Login Forms -->

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PokeSchool | Cadastro</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/Styles/sign-up.css" />
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/img/LogoPokeSchool.png" type="image/x-icon">
 </head>
 <body>
 <!-- Login Forms -->

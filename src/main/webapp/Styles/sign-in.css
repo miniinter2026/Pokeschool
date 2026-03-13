@@ -23,8 +23,22 @@
 
 :root {
   --font-title: "metropolis", sans-serif;
-  --font-text: "montserrat", sans-serif;
-  --principal-text-color: #fff;
+  --font-text: "Montserrat", sans-serif;
+
+  --red:        #cc0000;
+  --red-dark:   #990000;
+  --red-glow:   #ff2222;
+  --black:      #0a0a0a;
+  --black-card: #111111;
+  --black-mid:  #1a1a1a;
+  --white:      #ffffff;
+  --gray-soft:  rgba(255, 255, 255, 0.06);
+  --gray-line:  rgba(255, 255, 255, 0.12);
+  --gray-text:  rgba(255, 255, 255, 0.45);
+
+  --radius-card: 20px;
+  --radius-input: 10px;
+  --transition: 0.22s ease;
 }
 
 body {
@@ -42,40 +56,105 @@ h1 {
   font-family: var(--font-title);
   font-size: 65px;
   text-align: center;
-  color: var(--principal-text-color);
+  color: var(--white);
 }
 label {
   font-family: var(--font-text);
   font-weight: 700;
-  font-size: 15px;
-  color: var(--principal-text-color);
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--gray-text);
+  margin-bottom: 5px;
+  margin-top: 12px;
+  padding-left: 2px;
 }
 form {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 10%;
+  margin-top: 28px;
+  gap: 4px;
 }
 
 input {
-  padding: 8px;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  background-color: rgba(255, 255, 255, 0.288);
-  border: 1.25px solid white;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: var(--radius-input);
+  margin-bottom: 4px;
+  align-self: center;
+
+  background-color: var(--gray-soft);
+  border: 1px solid var(--gray-line);
+  color: var(--white);
+
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+
+  transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
 }
+
 input::placeholder {
-  color: var(--principal-text-color);
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: 400;
+}
+
+input:focus {
+  border-color: var(--red);
+  background-color: rgba(204, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.15);
+}
+
+input:hover:not(:focus) {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .loginFormsSection {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 416px;
-  margin-top: 50px;
-  height: 580px;
+  width: min(460px, 92vw);
+  padding: 40px 36px 36px;
+  margin-top: 18px;
+
+  background: var(--black-card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--gray-line);
+
+  /* sombra com halo vermelho */
+  box-shadow:
+          0 0 0 1px rgba(204, 0, 0, 0.15),
+          0 8px 32px rgba(0, 0, 0, 0.7),
+          0 0 60px rgba(160, 0, 0, 0.18);
+
+  overflow: hidden;
+}
+
+/* faixa vermelha no topo do card — referência à Pokédex */
+.loginFormsSection::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--red-dark), var(--red), var(--red-dark));
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+
+/* detalhe circular decorativo — como o botão da Pokébola */
+.loginFormsSection::after {
+  content: "";
+  position: absolute;
+  top: -38px; right: -38px;
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(204,0,0,0.18) 0%, transparent 70%);
+  border: 1px solid rgba(204,0,0,0.15);
+  pointer-events: none;
 }
 
 button {
@@ -85,7 +164,7 @@ button {
   border: none;
   border-radius: 6px;
   background-color: #d80000;
-  color: var(--principal-text-color);
+  color: var(--white);
   font-family: var(--font-text);
   font-size: 20px;
   transition: 0.2s ease-out;
@@ -96,20 +175,44 @@ button:hover {
 }
 .toggle-senha {
   position: absolute;
-  right: 2.5px;
-  top: 37%;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: white;
-  width: 35px;
-  height: 30px;
+  font-size: 17px;
+  color: var(--gray-text);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color var(--transition), background-color var(--transition);
+  padding: 0;
+}
+
+.toggle-senha:hover {
+  color: var(--white);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* wrapper do campo de senha para posicionar o toggle */
+.input-senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-senha-wrapper input {
+  margin-bottom: 0;
+  padding-right: 44px;
 }
 p {
   margin-top: -90px;
   font-family: var(--font-text);
-  color: var(--principal-text-color);
+  color: var(--white);
   font-weight: 600;
   align-self: center;
 }

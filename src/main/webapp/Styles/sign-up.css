@@ -5,7 +5,7 @@
 @font-face {
   font-family: "Montserrat";
   src: url("../assets/fontes/Montserrat/Montserrat-VariableFont_wght.ttf")
-    format("truetype");
+  format("truetype");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -14,7 +14,7 @@
 @font-face {
   font-family: "Montserrat";
   src: url("../assets/fontes/Montserrat/Montserrat-Italic-VariableFont_wght.ttf")
-    format("truetype");
+  format("truetype");
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
@@ -23,59 +23,149 @@
 :root {
   --font-title: "metropolis", sans-serif;
   --font-text: "Montserrat", sans-serif;
-  --principal-text-color: #fff;
+
+  --red:        #cc0000;
+  --red-dark:   #990000;
+  --red-glow:   #ff2222;
+  --black:      #0a0a0a;
+  --black-card: #111111;
+  --black-mid:  #1a1a1a;
+  --white:      #ffffff;
+  --gray-soft:  rgba(255, 255, 255, 0.06);
+  --gray-line:  rgba(255, 255, 255, 0.12);
+  --gray-text:  rgba(255, 255, 255, 0.45);
+
+  --radius-card: 20px;
+  --radius-input: 10px;
+  --transition: 0.22s ease;
 }
 
+/*
+  FIX: O body agora usa padding vertical para garantir respiro nas bordas,
+  e background-attachment: fixed mantém o gradiente fixo mesmo com scroll.
+  O min-height: 100vh + padding evita que o conteúdo cole nas bordas.
+*/
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-
   margin: 0;
   min-height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+
   background: linear-gradient(135deg, #ff0000 0%, #000000 50%, #ffffff 100%);
+  background-attachment: fixed;
 }
 
+/* FIX: h1 menor para economizar espaço vertical */
 h1 {
   font-family: var(--font-title);
-  font-size: 65px;
+  font-size: clamp(36px, 7vw, 55px);
   text-align: center;
-  color: var(--principal-text-color);
+  color: var(--white);
+  margin: 0 0 4px 0;
 }
+
 label {
   font-family: var(--font-text);
   font-weight: 700;
-  font-size: 15px;
-  color: var(--principal-text-color);
+  font-size: 11px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--gray-text);
+  margin-bottom: 5px;
+  margin-top: 10px;
+  padding-left: 2px;
 }
+
 form {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 5%;
+  margin-top: 8px;
+  gap: 2px;
 }
 
 input {
-  padding: 8px;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  background-color: rgba(255, 255, 255, 0.288);
-  border: 1.25px solid white;
-}
-input::placeholder {
-  color: var(--principal-text-color);
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: var(--radius-input);
+  margin-bottom: 5px;
+  align-self: center;
+  box-sizing: border-box;
+
+  background-color: var(--gray-soft);
+  border: 1px solid var(--gray-line);
+  color: var(--white);
+
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+
+  transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
 }
 
+input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+  font-weight: 400;
+}
+
+input:focus {
+  border-color: var(--red);
+  background-color: rgba(204, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.15);
+}
+
+input:hover:not(:focus) {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* FIX: padding reduzido e margin-top menor */
 .cadastroFormsSection {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 416px;
-  margin-top: 50px;
-  height: 650px;
+  width: min(460px, 92vw);
+  padding: 28px 32px 28px;
+  margin-top: 10px;
+
+  background: var(--black-card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--gray-line);
+
+  box-shadow:
+          0 0 0 1px rgba(204, 0, 0, 0.15),
+          0 8px 32px rgba(0, 0, 0, 0.7),
+          0 0 60px rgba(160, 0, 0, 0.18);
+
+  overflow: hidden;
+}
+
+.cadastroFormsSection::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--red-dark), var(--red), var(--red-dark));
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+}
+
+.cadastroFormsSection::after {
+  content: "";
+  position: absolute;
+  top: -38px; right: -38px;
+  width: 110px; height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(204,0,0,0.18) 0%, transparent 70%);
+  border: 1px solid rgba(204,0,0,0.15);
+  pointer-events: none;
 }
 
 button {
@@ -85,11 +175,13 @@ button {
   border: none;
   border-radius: 6px;
   background-color: #d80000;
-  color: var(--principal-text-color);
+  color: var(--white);
   font-family: var(--font-text);
   font-size: 20px;
   transition: 0.2s ease-out;
+  cursor: pointer;
 }
+
 button:hover {
   background-color: #b20000;
   transition: 0.2s ease-in;
@@ -97,32 +189,59 @@ button:hover {
 
 .toggle-senha {
   position: absolute;
-  right: 2.5px;
-  top: 62.5%;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 18px;
-  color: white;
-  width: 35px;
-  height: 30px;
+  font-size: 17px;
+  color: var(--gray-text);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: color var(--transition), background-color var(--transition);
+  padding: 0;
+}
+
+.toggle-senha:hover {
+  color: var(--white);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.input-senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-senha-wrapper input {
+  margin-bottom: 0;
+  padding-right: 44px;
 }
 
 p {
   font-family: var(--font-text);
-  color: var(--principal-text-color);
+  color: var(--white);
   font-weight: 600;
   align-self: center;
+  margin: 10px 0 0 0;
 }
-  a {
-    text-decoration: none;
-    color: #d80000;
-    transition: 0.2s ease-out;
-  }
-  a:hover {
-    color: #b20000;
-    transition: 0.2s ease-in;
-  }
+
+a {
+  text-decoration: none;
+  color: #d80000;
+  transition: 0.2s ease-out;
+}
+
+a:hover {
+  color: #b20000;
+  transition: 0.2s ease-in;
+}
+
 .modal {
   position: fixed;
   top: 0;
@@ -132,7 +251,7 @@ p {
 
   background-color: rgba(0, 0, 0, 0.5);
 
-  display: none; /* começa escondido */
+  display: none;
   justify-content: center;
   align-items: center;
 }
@@ -158,7 +277,6 @@ p {
 }
 
 .close:hover {
-  /* Corrigido: estava 'close:hover' */
   transform: rotate(180deg);
   color: #000000;
   transition: 0.3s ease;
@@ -181,12 +299,14 @@ li {
   font-weight: 700;
   font-size: 1.5rem;
 }
+
 .modal-content {
   animation: modalFade 0.3s ease;
 }
-.logo{
-  width: 100px;
-  margin-bottom: 15px;
+
+.logo {
+  width: 80px;
+  margin-bottom: 10px;
 }
 
 @keyframes modalFade {
