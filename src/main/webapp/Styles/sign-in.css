@@ -89,6 +89,7 @@ button {
   font-family: var(--font-text);
   font-size: 20px;
   transition: 0.2s ease-out;
+  cursor: pointer;
 }
 button:hover {
   background-color: #b20000;

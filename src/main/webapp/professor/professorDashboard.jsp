@@ -257,9 +257,7 @@
 
 <div id="modal-edit" class="modal">
     <div class="modal-content">
-        <div class="fechar">
-            <span class="close" onclick="fecharModal('modal-edit')">&times;</span>
-        </div>
+        <span class="close" onclick="fecharModal('modal-edit')">&times;</span>
         <h3>Editar Notas</h3>
         <form action="<%= request.getContextPath() %>/professor/notas" method="post">
             <input type="hidden" name="acao" value="editar">

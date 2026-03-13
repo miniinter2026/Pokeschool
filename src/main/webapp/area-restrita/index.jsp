@@ -211,11 +211,11 @@
             <div class="form-group">
                 <label>Sala:</label>
                 <select name="sala" id="edit-sala" required>
-                    <option value="1">1K</option>
-                    <option value="2">2J</option>
-                    <option value="3">3H</option>
-                    <option value="4">4S</option>
-                    <option value="5">5U</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
             </div>
             <button type="submit" class="btn btn-primary">Atualizar</button>
@@ -285,12 +285,8 @@
         <form action="adminProfessores" method="post">
             <input type="hidden" name="acao" value="editar">
             <div class="form-group">
-                <label>ID:</label>
-                <input type="number" name="id" id="edit-id" readonly style="background-color:#f0f0f0;">
-            </div>
-            <div class="form-group">
                 <label>Nome Completo:</label>
-                <input type="text" name="nome" id="edit-nome" required>
+                <input type="text" name="nome" id="edit-prof-nome" required >
             </div>
             <div class="form-group">
                 <label>Usuário:</label>
@@ -298,11 +294,11 @@
             </div>
             <div class="form-group">
                 <label>Email:</label>
-                <input type="email" name="email" id="edit-email" required>
+                <input type="email" name="email" id="edit-prof-email" required>
             </div>
             <div class="form-group">
                 <label>Senha (deixe em branco para manter):</label>
-                <input type="password" name="senha" id="edit-senha" placeholder="********">
+                <input type="password" name="senha" id="edit-prof-senha" placeholder="******">
             </div>
             <div class="form-group">
                 <label>Disciplina:</label>
@@ -323,7 +319,9 @@
     <div class="modal-content">
         <span class="close" onclick="fecharModal('modal-delete-professor')">&times;</span>
         <h3>Confirmar Exclusão</h3>
-        <p>Tem certeza que deseja excluir este professor?</p>
+        <div class="msg-confirmar">
+            <p>Tem certeza que deseja excluir este aluno?</p>
+        </div>
         <form action="adminProfessores" method="post">
             <input type="hidden" name="acao" value="excluir">
             <input type="hidden" name="id" id="delete-id">
@@ -437,18 +435,16 @@
         fecharModal('modal-add-professor');
         fecharModal('modal-delete-professor');
 
-        const id = btn.getAttribute('data-id');
         const nome = btn.getAttribute('data-nome');
         const usuario = btn.getAttribute('data-usuario');
         const email = btn.getAttribute('data-email');
         const disciplina = btn.getAttribute('data-disciplina');
 
-        document.getElementById('edit-id').value = id;
-        document.getElementById('edit-nome').value = nome;
+        document.getElementById('edit-prof-nome').value = nome;
         document.getElementById('edit-usuario').value = usuario;
-        document.getElementById('edit-email').value = email;
+        document.getElementById('edit-prof-email').value = email;
         document.getElementById('edit-disciplina').value = disciplina;
-        document.getElementById('edit-senha').value = '';
+        document.getElementById('edit-prof-senha').value = '';
         document.getElementById('modal-edit-professor').style.display = 'block';
     }
 

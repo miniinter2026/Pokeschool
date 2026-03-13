@@ -11,7 +11,7 @@
 <!-- Login Forms -->
 <section class="loginFormsSection">
   <h1>
-    Bem Vindo <br />
+    Bem-Vindo <br />
     Novamente!!
   </h1>
   <img src="${pageContext.request.contextPath}/assets/img/LogoPokeSchool.png" class="logo">
