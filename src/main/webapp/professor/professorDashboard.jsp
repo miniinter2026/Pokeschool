@@ -63,7 +63,6 @@
 
     <aside class="sidebar">
         <div class="profile">
-            <img src="<%= request.getContextPath() %>/assets/img/team-valor.png" alt="Foto">
             <h3><%= professor.getNomeCompleto() %></h3>
         </div>
         <nav>

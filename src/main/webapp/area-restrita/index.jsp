@@ -11,7 +11,6 @@
 <div class="layout">
     <div class="sidebar">
         <div class="profile">
-            <img src="<%= request.getContextPath() %>/assets/img/arceus.jpg" alt="Admin">
             <h3>ADMIN</h3>
         </div>
         <nav>

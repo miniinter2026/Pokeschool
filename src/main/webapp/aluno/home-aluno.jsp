@@ -25,7 +25,6 @@
 
     <aside class="sidebar">
         <div class="profile">
-            <img src="<%= request.getContextPath() %>/assets/img/ash.jpg" alt="Perfil">
             <h3><%= aluno != null ? aluno.getNomeCompleto() : "Aluno" %></h3>
         </div>
 

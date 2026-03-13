@@ -29,6 +29,11 @@ html, body {
     z-index: 10;
 }
 
+.profile {
+    text-align: center;
+    margin-top: 120px;
+}
+
 .profile img {
     width: 100px;
     height: 100px;
