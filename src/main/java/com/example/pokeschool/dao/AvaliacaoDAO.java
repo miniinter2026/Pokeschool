@@ -25,8 +25,14 @@ public class AvaliacaoDAO {
                 a.setId(rs.getInt("id"));
                 a.setIdBoletim(rs.getInt("id_boletim"));
                 a.setNomeDisciplina(rs.getString("disciplina"));
-                a.setN1(rs.getDouble("n1"));
-                a.setN2(rs.getDouble("n2"));
+
+                // Tratamento para valores nulos
+                double n1Value = rs.getDouble("n1");
+                a.setN1(rs.wasNull() ? null : n1Value);
+
+                double n2Value = rs.getDouble("n2");
+                a.setN2(rs.wasNull() ? null : n2Value);
+
                 lista.add(a);
             }
         } catch (Exception e) {
@@ -35,7 +41,6 @@ public class AvaliacaoDAO {
         return lista;
     }
 
-    // ✅ NOVO MÉTODO: Filtrar por aluno E disciplina
     public List<Avaliacao> listarPorAlunoERa(int ra, int disciplinaId) {
         List<Avaliacao> lista = new ArrayList<>();
         String sql = "SELECT a.id, a.id_boletim, d.nome AS disciplina, b.n1, b.n2 " +
@@ -55,8 +60,13 @@ public class AvaliacaoDAO {
                 a.setId(rs.getInt("id"));
                 a.setIdBoletim(rs.getInt("id_boletim"));
                 a.setNomeDisciplina(rs.getString("disciplina"));
-                a.setN1(rs.getDouble("n1"));
-                a.setN2(rs.getDouble("n2"));
+
+                double n1Value = rs.getDouble("n1");
+                a.setN1(rs.wasNull() ? null : n1Value);
+
+                double n2Value = rs.getDouble("n2");
+                a.setN2(rs.wasNull() ? null : n2Value);
+
                 lista.add(a);
             }
         } catch (Exception e) {
@@ -68,13 +78,16 @@ public class AvaliacaoDAO {
     public void salvar(Avaliacao a) {
         String sqlBoletim = "INSERT INTO boletim (n1, n2) VALUES (?, ?) RETURNING id";
         String sqlAvaliacao = "INSERT INTO avaliacao (id_aluno, id_disciplina, id_boletim) VALUES (?, ?, ?)";
+
         try (Connection conn = Conexao.conectar()) {
             conn.setAutoCommit(false);
 
             int idBoletim;
             try (PreparedStatement ps = conn.prepareStatement(sqlBoletim)) {
-                ps.setDouble(1, a.getN1());
-                ps.setDouble(2, a.getN2());
+                // Usando setObject para aceitar null
+                ps.setObject(1, a.getN1(), Types.DECIMAL);
+                ps.setObject(2, a.getN2(), Types.DECIMAL);
+
                 ResultSet rs = ps.executeQuery();
                 rs.next();
                 idBoletim = rs.getInt(1);
@@ -97,9 +110,11 @@ public class AvaliacaoDAO {
         String sql = "UPDATE boletim SET n1 = ?, n2 = ? WHERE id = ?";
         try (Connection conn = Conexao.conectar();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDouble(1, a.getN1());
-            ps.setDouble(2, a.getN2());
+
+            ps.setObject(1, a.getN1(), Types.DECIMAL);
+            ps.setObject(2, a.getN2(), Types.DECIMAL);
             ps.setInt(3, a.getIdBoletim());
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

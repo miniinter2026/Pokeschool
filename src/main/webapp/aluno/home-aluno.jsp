@@ -9,6 +9,12 @@
 <head>
     <title>PokeSchool | Aluno</title>
     <link rel="stylesheet" href="../Styles/dashboard.css">
+    <style>
+        .em-processo {
+            color: #333;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
 
@@ -61,8 +67,8 @@
                     %>
                     <tr>
                         <td><%= av.getNomeDisciplina() %></td>
-                        <td><%= av.getN1() %></td>
-                        <td><%= av.getN2() %></td>
+                        <td><%= av.getN1() != null ? av.getN1() : "—" %></td>
+                        <td><%= av.getN2() != null ? av.getN2() : "—" %></td>
                     </tr>
                     <%
                             }
@@ -121,14 +127,24 @@
                     <%
                         if (notas != null && !notas.isEmpty()) {
                             for (Avaliacao av : notas) {
-                                double media = (av.getN1() + av.getN2()) / 2.0;
-                                String status = media >= 7 ? "APROVADO" : "REPROVADO";
-                                String classe = media >= 7 ? "aprovado" : "reprovado";
+                                Double n1 = av.getN1();
+                                Double n2 = av.getN2();
+
+                                String mediaDisplay = "—";
+                                String status = "EM PROCESSO";
+                                String classe = "em-processo";
+
+                                if (n1 != null && n2 != null) {
+                                    double media = (n1 + n2) / 2.0;
+                                    mediaDisplay = String.format("%.1f", media);
+                                    status = media >= 7 ? "APROVADO" : "REPROVADO";
+                                    classe = media >= 7 ? "aprovado" : "reprovado";
+                                }
                     %>
 
                     <tr>
                         <td><%= av.getNomeDisciplina() %></td>
-                        <td><%= String.format("%.1f", media) %></td>
+                        <td class="<%= classe %>"><%= mediaDisplay %></td>
                         <td class="<%= classe %>"><%= status %></td>
                     </tr>
 

@@ -69,8 +69,21 @@ public class ProfessorNotasServlet extends HttpServlet {
         try {
             if ("inserir".equals(acao)) {
                 int ra = Integer.parseInt(request.getParameter("ra"));
-                double n1 = Double.parseDouble(request.getParameter("n1"));
-                double n2 = Double.parseDouble(request.getParameter("n2"));
+
+                //n1 e n2 como opcionais
+                Double n1 = null;
+                Double n2 = null;
+
+                String n1Param = request.getParameter("n1");
+                String n2Param = request.getParameter("n2");
+
+                if (n1Param != null && !n1Param.trim().isEmpty()) {
+                    n1 = Double.parseDouble(n1Param);
+                }
+
+                if (n2Param != null && !n2Param.trim().isEmpty()) {
+                    n2 = Double.parseDouble(n2Param);
+                }
 
                 AvaliacaoDAO dao = new AvaliacaoDAO();
                 Avaliacao av = new Avaliacao();
@@ -80,12 +93,25 @@ public class ProfessorNotasServlet extends HttpServlet {
                 av.setN2(n2);
 
                 dao.salvar(av);
-                System.out.println("✅ Nota inserida para RA: " + ra);
+                System.out.println("nota inserida para RA: " + ra + " (N1=" + n1 + ", N2=" + n2 + ")");
             }
             else if ("editar".equals(acao)) {
                 int idBoletim = Integer.parseInt(request.getParameter("idBoletim"));
-                double n1 = Double.parseDouble(request.getParameter("n1"));
-                double n2 = Double.parseDouble(request.getParameter("n2"));
+
+                //n1 e n2 como opcionais
+                Double n1 = null;
+                Double n2 = null;
+
+                String n1Param = request.getParameter("n1");
+                String n2Param = request.getParameter("n2");
+
+                if (n1Param != null && !n1Param.trim().isEmpty()) {
+                    n1 = Double.parseDouble(n1Param);
+                }
+
+                if (n2Param != null && !n2Param.trim().isEmpty()) {
+                    n2 = Double.parseDouble(n2Param);
+                }
 
                 AvaliacaoDAO dao = new AvaliacaoDAO();
                 Avaliacao av = new Avaliacao();
@@ -94,22 +120,21 @@ public class ProfessorNotasServlet extends HttpServlet {
                 av.setN2(n2);
 
                 dao.atualizar(av);
-                System.out.println("✅ Nota atualizada ID: " + idBoletim);
+                System.out.println("nota atualizada ID: " + idBoletim + " (N1=" + n1 + ", N2=" + n2 + ")");
             }
             else if ("excluir".equals(acao)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 AvaliacaoDAO dao = new AvaliacaoDAO();
                 dao.deletar(id);
-                System.out.println("✅ Nota excluída ID: " + id);
+                System.out.println("nota excluída ID: " + id);
             }
         } catch (Exception e) {
-            System.err.println("❌ Erro no ProfessorNotasServlet: " + e.getMessage());
+            System.err.println("erro no ProfessorNotasServlet: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/html/erro.html");
             return;
         }
 
-        // Redireciona de volta para o dashboard
         response.sendRedirect(request.getContextPath() + "/professor/dashboard");
     }
 }

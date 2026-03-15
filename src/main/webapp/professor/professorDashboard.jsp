@@ -40,6 +40,10 @@
         .aluno-header .btn-add:hover {
             background-color: #b30000;
         }
+        .em-processo {
+            color: #333;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -141,19 +145,30 @@
                                 List<Avaliacao> notas = avaliacaoDAO.listarPorAlunoERa(a.getRa(), disciplinaId);
                                 if (notas != null && !notas.isEmpty()) {
                                     for (Avaliacao av : notas) {
-                                        double media = (av.getN1() + av.getN2()) / 2;
-                                        String situacao = media >= 7 ? "APROVADO" : "REPROVADO";
-                                        String classe = media >= 7 ? "aprovado" : "reprovado";
+                                        Double n1 = av.getN1();
+                                        Double n2 = av.getN2();
+
+                                        // Lógica de média e situação
+                                        String mediaDisplay = "—";
+                                        String situacao = "EM PROCESSO";
+                                        String classe = "em-processo";
+
+                                        if (n1 != null && n2 != null) {
+                                            double media = (n1 + n2) / 2;
+                                            mediaDisplay = String.format("%.1f", media);
+                                            situacao = media >= 7 ? "APROVADO" : "REPROVADO";
+                                            classe = media >= 7 ? "aprovado" : "reprovado";
+                                        }
                         %>
                         <tr class="nota-row" data-nome="<%= a.getNomeCompleto().toLowerCase() %>" data-ra="<%= a.getRa() %>">
                             <td><%= a.getRa() %></td>
                             <td><%= a.getNomeCompleto() %></td>
-                            <td><%= av.getN1() %></td>
-                            <td><%= av.getN2() %></td>
-                            <td><%= String.format("%.1f", media) %></td>
+                            <td><%= n1 != null ? n1 : "—" %></td>
+                            <td><%= n2 != null ? n2 : "—" %></td>
+                            <td class="<%= classe %>"><%= mediaDisplay %></td>
                             <td class="<%= classe %>"><%= situacao %></td>
                             <td>
-                                <button class="btn-edit-small" onclick="abrirEditar('<%= av.getIdBoletim() %>', '<%= av.getN1() %>', '<%= av.getN2() %>')">Editar</button>
+                                <button class="btn-edit-small" onclick="abrirEditar('<%= av.getIdBoletim() %>', '<%= n1 != null ? n1 : "" %>', '<%= n2 != null ? n2 : "" %>')">Editar</button>
                             </td>
                         </tr>
                         <%      }
@@ -186,9 +201,6 @@
                             ObservacoesDAO obsDAO = new ObservacoesDAO();
                             for (Aluno a : listaAlunos) {
                                 List<Observacoes> observacoes = obsDAO.listarPorAlunoERa(a.getRa(), disciplinaId);
-
-                                // Criamos uma div pai para agrupar o header + observações de cada aluno
-                                // Isso facilita o filtro via JavaScript
                     %>
                     <div class="aluno-group" data-ra="<%= a.getRa() %>" data-nome="<%= a.getNomeCompleto().toLowerCase() %>">
                         <div class="aluno-header">
@@ -236,18 +248,18 @@
         <div class="fechar">
             <span class="close" onclick="fecharModal('modal-add')">&times;</span>
         </div>
-        <h3>Novas Notas</h3>
+        <h3>Lançar Notas</h3>
         <form action="<%= request.getContextPath() %>/professor/notas" method="post">
             <input type="hidden" name="acao" value="inserir">
             <input type="hidden" name="ra" id="modal-ra">
             <input type="hidden" name="disciplinaId" value="<%= disciplinaId %>">
             <div class="form-group">
-                <label>N1:</label>
-                <input type="number" name="n1" step="0.01" min="0" max="10" required>
+                <label>N1 (opcional):</label>
+                <input type="number" name="n1" step="0.01" min="0" max="10" placeholder="Deixe em branco se não tiver">
             </div>
             <div class="form-group">
-                <label>N2:</label>
-                <input type="number" name="n2" step="0.01" min="0" max="10" required>
+                <label>N2 (opcional):</label>
+                <input type="number" name="n2" step="0.01" min="0" max="10" placeholder="Deixe em branco se não tiver">
             </div>
             <button type="submit" class="btn-primary">Salvar</button>
         </form>
@@ -262,12 +274,12 @@
             <input type="hidden" name="acao" value="editar">
             <input type="hidden" name="idBoletim" id="edit-id">
             <div class="form-group">
-                <label>N1:</label>
-                <input type="number" name="n1" id="edit-n1" step="0.01" required>
+                <label>N1 (opcional):</label>
+                <input type="number" name="n1" id="edit-n1" step="0.01" placeholder="Deixe em branco para manter">
             </div>
             <div class="form-group">
-                <label>N2:</label>
-                <input type="number" name="n2" id="edit-n2" step="0.01" required>
+                <label>N2 (opcional):</label>
+                <input type="number" name="n2" id="edit-n2" step="0.01" placeholder="Deixe em branco para manter">
             </div>
             <button type="submit" class="btn-primary">Atualizar</button>
         </form>
@@ -387,20 +399,14 @@
             let nome = grupo.getAttribute("data-nome") || "";
             let ra = grupo.getAttribute("data-ra") || "";
 
-            // Se o termo estiver vazio ou se o nome/RA coincidir
+            //se o termo estiver vazio ou se o nome/RA coincidir
             if (termo === "" || nome.includes(termo) || ra.includes(termo)) {
                 grupo.style.display = "block";
-
-                // Opcional: Se quiser filtrar o TEXTO da observação também:
-                if(termo !== "" && !nome.includes(termo) && !ra.includes(termo)) {
-                    // Lógica extra caso queira esconder cards específicos dentro do aluno
-                }
             } else {
                 grupo.style.display = "none";
             }
         });
     });
 </script>
-
 </body>
 </html>
