@@ -24,7 +24,7 @@ public class EditarNotaServlet extends HttpServlet {
 
         AvaliacaoDAO dao = new AvaliacaoDAO();
 
-        // ========== AÇÃO DE EXCLUIR ==========
+        //EXCLUIR
         if ("excluir".equals(acao)) {
             if (idStr != null && !idStr.isEmpty()) {
                 dao.deletar(Integer.parseInt(idStr));
@@ -33,7 +33,7 @@ public class EditarNotaServlet extends HttpServlet {
             return;
         }
 
-        // ========== SALVAR OU ATUALIZAR ==========
+        //SALVAR OU ATUALIZAR
         Avaliacao a = new Avaliacao();
 
         try {
@@ -46,7 +46,7 @@ public class EditarNotaServlet extends HttpServlet {
                 a.setIdDisciplina(Integer.parseInt(disciplinaStr));
                 dao.salvar(a);
             } else {
-                // Atualizar nota existente
+                // Atualizar nota
                 a.setId(Integer.parseInt(idStr));
                 dao.atualizar(a);
             }

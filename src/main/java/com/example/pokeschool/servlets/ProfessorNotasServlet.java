@@ -17,7 +17,7 @@ public class ProfessorNotasServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        System.out.println("✅ ProfessorNotasServlet INICIADO!");
+        System.out.println("ProfessorNotasServlet INICIADO!");
     }
 
     @Override

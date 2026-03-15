@@ -43,7 +43,7 @@ public class AdminAlunosServlet extends HttpServlet {
         }
 
         String acao = request.getParameter("acao");
-        System.out.println("🔵 AdminAlunos - Ação: " + acao);
+        System.out.println("AdminAlunos - Ação: " + acao);
 
         try {
             AlunoDAO dao = new AlunoDAO();
@@ -63,7 +63,7 @@ public class AdminAlunosServlet extends HttpServlet {
                 a.setIdSala(sala);
 
                 dao.inserir(a);
-                System.out.println("✅ Aluno inserido RA: " + ra);
+                System.out.println("Aluno inserido RA: " + ra);
             }
             else if ("editar".equals(acao)) {
                 int ra = Integer.parseInt(request.getParameter("ra"));
@@ -78,24 +78,24 @@ public class AdminAlunosServlet extends HttpServlet {
                 a.setEmail(email);
                 a.setIdSala(sala);
 
-                // Só atualiza senha se foi preenchida
+                //so atualiza senha se foi preenchida
                 if (senha != null && !senha.trim().isEmpty()) {
                     a.setSenha(senha);
                 }
 
                 boolean atualizou = dao.atualizar(a);
-                System.out.println("✅ Aluno atualizado RA " + ra + ": " + (atualizou ? "SIM" : "NÃO"));
+                System.out.println("Aluno atualizado RA " + ra + ": " + (atualizou ? "SIM" : "NÃO"));
             }
             else if ("excluir".equals(acao)) {
                 int ra = Integer.parseInt(request.getParameter("ra"));
                 dao.deletar(ra);
-                System.out.println("✅ Aluno excluído RA: " + ra);
+                System.out.println("Aluno excluído RA: " + ra);
             }
 
             response.sendRedirect(request.getContextPath() + "/adminDashboard");
 
         } catch (Exception e) {
-            System.err.println("❌ Erro no AdminAlunosServlet: " + e.getMessage());
+            System.err.println("Erro no AdminAlunosServlet: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/html/erro.html");
         }

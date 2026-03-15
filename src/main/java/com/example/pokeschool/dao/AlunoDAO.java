@@ -52,7 +52,7 @@ public class AlunoDAO {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            System.out.println("✅ Conectado ao banco!");
+            System.out.println("Conectado ao banco!");
 
             while (rs.next()) {
                 Aluno a = new Aluno();
@@ -64,7 +64,7 @@ public class AlunoDAO {
                 lista.add(a);
             }
 
-            System.out.println("✅ Total de alunos: " + lista.size());
+            System.out.println("Total de alunos: " + lista.size());
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -140,7 +140,6 @@ public class ProfessorDAO {
         return professor;
     }
 
-    // ✅ MÉTODO ADICIONADO: buscarPorUsuario
     public Professor buscarPorUsuario(String usuario) {
         Professor professor = null;
         String sql = "SELECT * FROM professor WHERE nome_usuario = ?";
@@ -177,11 +176,11 @@ public class ProfessorDAO {
             ps.setString(4, p.getEmail());
 
             int rowsAffected = ps.executeUpdate();
-            System.out.println("✅ ProfessorDAO.inserir: " + rowsAffected + " linha(s) afetada(s)");
+            System.out.println("ProfessorDAO.inserir: " + rowsAffected + " linha(s) afetada(s)");
             return rowsAffected > 0;
 
         } catch (Exception e) {
-            System.err.println("❌ Erro ao inserir professor: " + e.getMessage());
+            System.err.println("Erro ao inserir professor: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -200,11 +199,11 @@ public class ProfessorDAO {
                 ps.setInt(5, p.getId());
 
                 int rowsAffected = ps.executeUpdate();
-                System.out.println("✅ ProfessorDAO.atualizar (com senha): " + rowsAffected + " linha(s) afetada(s)");
+                System.out.println("ProfessorDAO.atualizar (com senha): " + rowsAffected + " linha(s) afetada(s)");
                 return rowsAffected > 0;
 
             } catch (Exception e) {
-                System.err.println("❌ Erro ao atualizar professor (com senha): " + e.getMessage());
+                System.err.println("Erro ao atualizar professor (com senha): " + e.getMessage());
                 e.printStackTrace();
                 return false;
             }
@@ -219,11 +218,11 @@ public class ProfessorDAO {
                 ps.setInt(4, p.getId());
 
                 int rowsAffected = ps.executeUpdate();
-                System.out.println("✅ ProfessorDAO.atualizar (sem senha): " + rowsAffected + " linha(s) afetada(s)");
+                System.out.println("ProfessorDAO.atualizar (sem senha): " + rowsAffected + " linha(s) afetada(s)");
                 return rowsAffected > 0;
 
             } catch (Exception e) {
-                System.err.println("❌ Erro ao atualizar professor (sem senha): " + e.getMessage());
+                System.err.println("Erro ao atualizar professor (sem senha): " + e.getMessage());
                 e.printStackTrace();
                 return false;
             }
@@ -239,7 +238,7 @@ public class ProfessorDAO {
             ResultSet rs = checkPs.executeQuery();
 
             if (rs.next()) {
-                System.out.println("⚠️ Professor ID " + id + " possui disciplina vinculada, removendo vínculo primeiro");
+                System.out.println("Professor ID " + id + " possui disciplina vinculada, removendo vínculo primeiro");
 
                 String updateSql = "UPDATE disciplina SET id_professor = NULL WHERE id_professor = ?";
                 try (PreparedStatement updatePs = conn.prepareStatement(updateSql)) {
@@ -248,7 +247,7 @@ public class ProfessorDAO {
                 }
             }
         } catch (Exception e) {
-            System.err.println("❌ Erro ao verificar disciplina do professor: " + e.getMessage());
+            System.err.println("Erro ao verificar disciplina do professor: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -259,11 +258,11 @@ public class ProfessorDAO {
 
             ps.setInt(1, id);
             int rowsAffected = ps.executeUpdate();
-            System.out.println("✅ ProfessorDAO.deletar: " + rowsAffected + " linha(s) afetada(s)");
+            System.out.println("ProfessorDAO.deletar: " + rowsAffected + " linha(s) afetada(s)");
             return rowsAffected > 0;
 
         } catch (Exception e) {
-            System.err.println("❌ Erro ao excluir professor: " + e.getMessage());
+            System.err.println("Erro ao excluir professor: " + e.getMessage());
             e.printStackTrace();
             return false;
         }

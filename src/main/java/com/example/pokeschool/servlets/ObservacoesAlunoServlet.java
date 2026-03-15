@@ -16,7 +16,7 @@ public class ObservacoesAlunoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // 🔥 Pegando o RA da URL
+        //RA da URL
         String raParam = request.getParameter("ra");
 
         if (raParam == null || raParam.isEmpty()) {
@@ -30,7 +30,7 @@ public class ObservacoesAlunoServlet extends HttpServlet {
         List<Observacoes> lista = dao.listarPorAluno(ra);
 
         request.setAttribute("listaObservacoes", lista);
-        request.setAttribute("ra", ra); // opcional, caso queira usar na JSP
+        request.setAttribute("ra", ra);
 
         request.getRequestDispatcher("/observacoesAluno.jsp")
                 .forward(request, response);

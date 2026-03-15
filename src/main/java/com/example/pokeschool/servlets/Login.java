@@ -29,12 +29,12 @@ public class Login extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            System.out.println("🔵 Acessando página de login (GET)");
+            System.out.println("Acessando página de login (GET)");
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {
-            System.err.println("❌ Erro no doGet do Login: " + e.getMessage());
+            System.err.println("Erro no doGet do Login: " + e.getMessage());
             e.printStackTrace();
             out.println("<h3>Erro ao carregar página de login: " + e.getMessage() + "</h3>");
             out.println("<a href='index.jsp'>Tentar novamente</a>");
@@ -52,13 +52,13 @@ public class Login extends HttpServlet {
             String usuario = request.getParameter("usuario");
             String senha = request.getParameter("senha");
 
-            System.out.println("🔵 Tentativa de login com usuário: " + usuario);
+            System.out.println("Tentativa de login com usuário: " + usuario);
 
             String tipo = identificarTipo(usuario);
-            System.out.println("🔵 Tipo identificado: " + tipo);
+            System.out.println("Tipo identificado: " + tipo);
 
             if (usuario == null || usuario.isEmpty() || senha == null || senha.isEmpty()) {
-                System.out.println("❌ Usuário ou senha vazios");
+                System.out.println("Usuário ou senha vazios");
                 request.setAttribute("erro", "Preencha todos os campos!");
                 RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
@@ -68,18 +68,18 @@ public class Login extends HttpServlet {
             if (tipo.equals("ALUNO")) {
                 AlunoDAO alunoDAO = new AlunoDAO();
                 int ra = Integer.parseInt(usuario);
-                System.out.println("🔵 RA do aluno: " + ra);
+                System.out.println("RA do aluno: " + ra);
 
                 boolean loginValido = false;
                 try {
                     loginValido = alunoDAO.verificaLoginAluno(ra, senha);
                 } catch (Exception e) {
-                    System.err.println("❌ Erro ao verificar login de aluno: " + e.getMessage());
+                    System.err.println("Erro ao verificar login de aluno: " + e.getMessage());
                     e.printStackTrace();
                 }
 
                 if (loginValido) {
-                    System.out.println("✅ Login de aluno válido!");
+                    System.out.println("Login de aluno válido!");
                     HttpSession session = request.getSession();
                     session.setAttribute("alunoRa", ra);
                     session.setAttribute("alunoNome", alunoDAO.buscarPorRa(ra).getNomeCompleto());
@@ -87,7 +87,7 @@ public class Login extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/aluno/home");
                 } else {
-                    System.out.println("❌ Login de aluno inválido");
+                    System.out.println("Login de aluno inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
                     RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                     rd.forward(request, response);
@@ -95,20 +95,20 @@ public class Login extends HttpServlet {
 
             } else if (tipo.equals("PROFESSOR")) {
                 ProfessorDAO professorDAO = new ProfessorDAO();
-                System.out.println("🔵 Verificando login de professor: " + usuario);
+                System.out.println("Verificando login de professor: " + usuario);
 
                 Professor professor = null;
 
                 try {
                     professor = professorDAO.login(usuario, senha);
-                    System.out.println("🔵 Professor retornado: " + (professor != null ? "SIM ✅" : "NÃO ❌"));
+                    System.out.println("Professor retornado: " + (professor != null ? "SIM" : "NÃO"));
                 } catch (Exception e) {
-                    System.err.println("❌ Erro ao verificar login de professor: " + e.getMessage());
+                    System.err.println("Erro ao verificar login de professor: " + e.getMessage());
                     e.printStackTrace();
                 }
 
                 if (professor != null) {
-                    System.out.println("✅ Login de professor válido!");
+                    System.out.println("Login de professor válido!");
 
                     HttpSession session = request.getSession();
                     session.setAttribute("professorId", professor.getId());
@@ -119,7 +119,7 @@ public class Login extends HttpServlet {
 
                     response.sendRedirect(request.getContextPath() + "/professor/dashboard");
                 } else {
-                    System.out.println("❌ Login de professor inválido");
+                    System.out.println("Login de professor inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
                     RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                     rd.forward(request, response);
@@ -127,12 +127,12 @@ public class Login extends HttpServlet {
 
             } else if (tipo.equals("ADM")) {
                 AdministradorDAO administradorDAO = new AdministradorDAO();
-                System.out.println("🔵 Verificando login de administrador: " + usuario);
+                System.out.println("Verificando login de administrador: " + usuario);
 
                 Administrador admin = administradorDAO.login(usuario, senha);
 
                 if (admin != null) {
-                    System.out.println("✅ Login de administrador válido! ID: " + admin.getId());
+                    System.out.println("Login de administrador válido! ID: " + admin.getId());
 
                     HttpSession session = request.getSession();
                     session.setAttribute("adminUsuario", usuario);
@@ -143,41 +143,41 @@ public class Login extends HttpServlet {
                     response.sendRedirect(request.getContextPath() + "/adminDashboard");
 
                 } else {
-                    System.out.println("❌ Login de administrador inválido");
+                    System.out.println("Login de administrador inválido");
                     request.setAttribute("erro", "Usuário ou senha incorretos!");
                     RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                     rd.forward(request, response);
                 }
             } else {
-                System.out.println("❌ Tipo de usuário não reconhecido");
+                System.out.println("Tipo de usuário não reconhecido");
                 request.setAttribute("erro", "Tipo de usuário não reconhecido!");
                 RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
                 rd.forward(request, response);
             }
 
         } catch (NumberFormatException e) {
-            System.err.println("❌ NumberFormatException no Login: " + e.getMessage());
+            System.err.println("NumberFormatException no Login: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("erro", "RA deve conter apenas números!");
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
 
         } catch (NullPointerException e) {
-            System.err.println("❌ NullPointerException no Login: " + e.getMessage());
+            System.err.println("NullPointerException no Login: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("erro", "Dados não recebidos corretamente.");
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
 
         } catch (ServletException e) {
-            System.err.println("❌ ServletException no Login: " + e.getMessage());
+            System.err.println("ServletException no Login: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("erro", "Erro ao processar requisição.");
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
             rd.forward(request, response);
 
         } catch (Exception e) {
-            System.err.println("❌ Erro geral no Login: " + e.getMessage());
+            System.err.println("Erro geral no Login: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("erro", "Erro inesperado: " + e.getMessage());
             RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
@@ -188,15 +188,15 @@ public class Login extends HttpServlet {
     private String identificarTipo(String usuario) {
         if (usuario == null) return "INVALIDO";
 
-        // ✅ ADM: Primeiro verifica se contém "adm" (case insensitive)
+        //ADM: Primeiro verifica se contém "adm"
         if (usuario.toLowerCase().contains("adm")) {
             return "ADM";
         }
-        // ✅ ALUNO: Apenas números
+        //ALUNO: Apenas números
         else if (usuario.matches("^\\d+$")) {
             return "ALUNO";
         }
-        // ✅ PROFESSOR: Formato com ponto
+        // PROFESSOR: Formato com ponto
         else if (usuario.matches("^[a-zA-Z]+\\.[a-zA-Z]+$")) {
             return "PROFESSOR";
         }

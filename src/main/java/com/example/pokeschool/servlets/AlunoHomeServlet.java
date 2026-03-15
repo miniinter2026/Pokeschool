@@ -23,27 +23,27 @@ public class AlunoHomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        System.out.println("🔵 AlunoHomeServlet INICIADO!");
+        System.out.println("AlunoHomeServlet INICIADO!");
 
         HttpSession session = request.getSession(false);
 
         // Verifica se o aluno está logado
         if (session == null) {
-            System.out.println("❌ Sessão é nula");
+            System.out.println("Sessão é nula");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
-        System.out.println("🔵 Sessão ID: " + session.getId());
+        System.out.println("Sessão ID: " + session.getId());
 
         Object alunoObj = session.getAttribute("aluno");
         Object raObj = session.getAttribute("alunoRa");
 
-        System.out.println("🔵 aluno na sessão: " + alunoObj);
-        System.out.println("🔵 alunoRa na sessão: " + raObj);
+        System.out.println("aluno na sessão: " + alunoObj);
+        System.out.println("alunoRa na sessão: " + raObj);
 
         if (alunoObj == null || raObj == null) {
-            System.out.println("❌ Aluno não está na sessão");
+            System.out.println("Aluno não está na sessão");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -51,46 +51,46 @@ public class AlunoHomeServlet extends HttpServlet {
         try {
             // Pega o RA da sessão
             Integer ra = (Integer) raObj;
-            System.out.println("🔵 RA do aluno: " + ra);
+            System.out.println("RA do aluno: " + ra);
 
             // Cria lista com UM aluno (para o sidebar funcionar)
             AlunoDAO alunoDAO = new AlunoDAO();
-            System.out.println("🔵 Buscando aluno no banco...");
+            System.out.println("Buscando aluno no banco...");
             Aluno aluno = alunoDAO.buscarPorRa(ra);
 
             if (aluno == null) {
-                System.out.println("❌ Aluno não encontrado no banco com RA: " + ra);
+                System.out.println("Aluno não encontrado no banco com RA: " + ra);
                 response.sendRedirect(request.getContextPath() + "/login");
                 return;
             }
 
-            System.out.println("🔵 Aluno encontrado: " + aluno.getNomeCompleto());
+            System.out.println("Aluno encontrado: " + aluno.getNomeCompleto());
 
             List<Aluno> listaAlunos = new ArrayList<>();
             listaAlunos.add(aluno);
 
             // Busca as notas do aluno
-            System.out.println("🔵 Buscando notas...");
+            System.out.println("Buscando notas...");
             AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO();
             List<Avaliacao> notas = avaliacaoDAO.listarPorAluno(ra);
-            System.out.println("🔵 Notas encontradas: " + (notas != null ? notas.size() : 0));
+            System.out.println("Notas encontradas: " + (notas != null ? notas.size() : 0));
 
             // Busca as observações do aluno
-            System.out.println("🔵 Buscando observações...");
+            System.out.println("Buscando observações...");
             ObservacoesDAO observacoesDAO = new ObservacoesDAO();
             List<Observacoes> observacoes = observacoesDAO.listarPorAluno(ra);
-            System.out.println("🔵 Observações encontradas: " + (observacoes != null ? observacoes.size() : 0));
+            System.out.println("Observações encontradas: " + (observacoes != null ? observacoes.size() : 0));
 
             // Coloca tudo na requisição
             request.setAttribute("listaAlunos", listaAlunos);
             request.setAttribute("notas", notas != null ? notas : new ArrayList<>());
             request.setAttribute("listaObservacoes", observacoes != null ? observacoes : new ArrayList<>());
 
-            System.out.println("🔵 Fazendo forward para home-aluno.jsp");
+            System.out.println("Fazendo forward para home-aluno.jsp");
             request.getRequestDispatcher("/aluno/home-aluno.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.err.println("❌ Erro no AlunoHomeServlet: " + e.getMessage());
+            System.err.println("Erro no AlunoHomeServlet: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/login?erro=erro_interno");
         }

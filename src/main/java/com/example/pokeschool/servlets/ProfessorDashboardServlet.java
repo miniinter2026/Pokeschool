@@ -25,7 +25,7 @@ public class ProfessorDashboardServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        System.out.println("✅ ProfessorDashboardServlet INICIADO!");
+        System.out.println("ProfessorDashboardServlet INICIADO!");
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProfessorDashboardServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
 
         if (session == null || session.getAttribute("professorId") == null) {
-            System.out.println("❌ Professor não logado, redirecionando para login");
+            System.out.println("Professor não logado, redirecionando para login");
             response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
@@ -43,8 +43,8 @@ public class ProfessorDashboardServlet extends HttpServlet {
         Integer disciplinaId = (Integer) session.getAttribute("professorDisciplina");
         Integer professorId = (Integer) session.getAttribute("professorId");
 
-        System.out.println("🔵 Professor ID: " + professorId);
-        System.out.println("🔵 Disciplina ID: " + disciplinaId);
+        System.out.println("Professor ID: " + professorId);
+        System.out.println("Disciplina ID: " + disciplinaId);
 
         AlunoDAO alunoDAO = new AlunoDAO();
         String termoBusca = request.getParameter("busca");
@@ -56,14 +56,14 @@ public class ProfessorDashboardServlet extends HttpServlet {
             listaAlunos = alunoDAO.listar();
         }
 
-        System.out.println("🔵 Total de alunos: " + listaAlunos.size());
+        System.out.println("Total de alunos: " + listaAlunos.size());
 
         request.setAttribute("listaAlunos", listaAlunos);
         request.setAttribute("termoBusca", termoBusca);
         request.setAttribute("disciplinaId", disciplinaId);
         request.setAttribute("professorId", professorId);
 
-        System.out.println("✅ Forward para professorDashboard.jsp");
+        System.out.println("Forward para professorDashboard.jsp");
         request.getRequestDispatcher("/professor/professorDashboard.jsp")
                 .forward(request, response);
     }

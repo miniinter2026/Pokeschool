@@ -73,7 +73,6 @@ public class ObservacoesDAO {
         return lista;
     }
 
-    // ✅ NOVO MÉTODO: Filtrar por aluno E disciplina
     public List<Observacoes> listarPorAlunoERa(int idAluno, int disciplinaId) {
         List<Observacoes> lista = new ArrayList<>();
         String sql = "SELECT o.id, o.data, o.descricao, d.nome AS disciplina, p.nome_completo AS professor " +

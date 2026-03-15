@@ -38,7 +38,7 @@ public class AdminProfessoresServlet extends HttpServlet {
                     .forward(request, response);
 
         } catch (Exception e) {
-            System.err.println("❌ Erro ao listar professores: " + e.getMessage());
+            System.err.println("Erro ao listar professores: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/html/erro.html");
         }
@@ -54,7 +54,7 @@ public class AdminProfessoresServlet extends HttpServlet {
         }
 
         String acao = request.getParameter("acao");
-        System.out.println("🔵 AdminProfessores - Ação: " + acao);
+        System.out.println("AdminProfessores - Ação: " + acao);
 
         try {
             ProfessorDAO dao = new ProfessorDAO();
@@ -74,7 +74,7 @@ public class AdminProfessoresServlet extends HttpServlet {
                 p.setSenha(senha);
 
                 boolean inseriu = dao.inserir(p);
-                System.out.println("✅ Professor inserido: " + (inseriu ? "SIM" : "NÃO"));
+                System.out.println("Professor inserido: " + (inseriu ? "SIM" : "NÃO"));
 
                 if (inseriu) {
                     // Busca o ID do professor recém-criado pelo nome de usuário
@@ -106,7 +106,7 @@ public class AdminProfessoresServlet extends HttpServlet {
                 discDao.desvincularProfessor(id);
 
                 boolean atualizou = dao.atualizar(p);
-                System.out.println("✅ Professor atualizado ID " + id + ": " + (atualizou ? "SIM" : "NÃO"));
+                System.out.println("Professor atualizado ID " + id + ": " + (atualizou ? "SIM" : "NÃO"));
 
                 if (atualizou) {
                     // Vincula a nova disciplina
@@ -120,13 +120,13 @@ public class AdminProfessoresServlet extends HttpServlet {
                 discDao.desvincularProfessor(id);
 
                 boolean deletou = dao.deletar(id);
-                System.out.println("✅ Professor excluído ID " + id + ": " + (deletou ? "SIM" : "NÃO"));
+                System.out.println("Professor excluído ID " + id + ": " + (deletou ? "SIM" : "NÃO"));
             }
 
             response.sendRedirect(request.getContextPath() + "/adminDashboard");
 
         } catch (Exception e) {
-            System.err.println("❌ Erro no AdminProfessoresServlet: " + e.getMessage());
+            System.err.println("Erro no AdminProfessoresServlet: " + e.getMessage());
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/html/erro.html");
         }

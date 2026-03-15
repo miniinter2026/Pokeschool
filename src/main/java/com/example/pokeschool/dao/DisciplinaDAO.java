@@ -61,7 +61,7 @@ public class DisciplinaDAO {
             ps.setInt(1, idProfessor);
             ps.setInt(2, idDisciplina);
             ps.executeUpdate();
-            System.out.println("✅ Disciplina " + idDisciplina + " vinculada ao professor " + idProfessor);
+            System.out.println("Disciplina " + idDisciplina + " vinculada ao professor " + idProfessor);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,7 +76,7 @@ public class DisciplinaDAO {
 
             ps.setInt(1, idProfessor);
             ps.executeUpdate();
-            System.out.println("✅ Professor " + idProfessor + " desvinculado das disciplinas");
+            System.out.println("Professor " + idProfessor + " desvinculado das disciplinas");
 
         } catch (Exception e) {
             e.printStackTrace();
